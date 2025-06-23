@@ -37,6 +37,24 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isTracking = false;
   bool _isPaused = false;
   final List<Map<String, String>> _events = [];
+  late final TextEditingController _playerNameController;
+
+  @override
+  void initState() {
+    super.initState();
+    _playerNameController = TextEditingController(text: _playerName);
+    _playerNameController.addListener(() {
+      setState(() {
+        _playerName = _playerNameController.text;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _playerNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,52 +89,78 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(height: 12),
             // Player name and interval
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Player Name', style: TextStyle(color: Colors.grey)),
-                      SizedBox(height: 4),
-                      TextFormField(
-                        initialValue: _playerName,
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(8)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(8)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 4.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: Text('Player Name', style: TextStyle(color: Colors.grey)),
                         ),
-                        style: TextStyle(color: Colors.white),
-                        onChanged: (value) => setState(() => _playerName = value),
-                      ),
-                    ],
+                        SizedBox(height: 4),
+                        SizedBox(
+                          height: 48,
+                          child: TextFormField(
+                            controller: _playerNameController,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(8)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(8)),
+                            ),
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                SizedBox(width: 8),
                 Expanded(
                   flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Interval', style: TextStyle(color: Colors.grey)),
-                      DropdownButton<String>(
-                        isExpanded: true,
-                        dropdownColor: Colors.black,
-                        value: _selectedInterval,
-                        items: ['1s', '2s', '3s', '4s', '5s', '10s', '30s', '60s']
-                            .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(e, style: TextStyle(color: Colors.white))))
-                            .toList(),
-                        onChanged: (value) => setState(() {
-                          if (value != null) _selectedInterval = value;
-                        }),
-                        underline: Container(),
-                      ),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: Text('Interval', style: TextStyle(color: Colors.grey)),
+                        ),
+                        SizedBox(height: 4),
+                        SizedBox(
+                          height: 48,
+                          child: DropdownButtonFormField<String>(
+                            isExpanded: true,
+                            dropdownColor: Colors.black,
+                            value: _selectedInterval,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(8)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(8)),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            ),
+                            items: ['1s', '2s', '3s', '4s', '5s', '10s', '30s', '60s']
+                                .map((e) => DropdownMenuItem(
+                                    value: e,
+                                    child: Text(e, style: TextStyle(color: Colors.white))))
+                                .toList(),
+                            onChanged: (value) => setState(() {
+                              if (value != null) _selectedInterval = value;
+                            }),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
