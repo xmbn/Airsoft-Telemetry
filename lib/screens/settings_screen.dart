@@ -1,4 +1,9 @@
+import 'dart:async';
+
+import 'package:airsoft_telemetry_flutter/services/location_service.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+
 import '../services/app_config.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -13,21 +18,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _selectedInterval = AppConfig.defaultInterval;
   final List<Map<String, String>> _events = [];
   late final TextEditingController _playerNameController;
+  final LocationService _locationService = LocationService();
+  Position? _currentPosition;
+  StreamSubscription<Position>? _positionStreamSubscription;
 
   @override
   void initState() {
     super.initState();
     _playerNameController = TextEditingController(text: _playerName);
     _playerNameController.addListener(() {
-      setState(() {
-        _playerName = _playerNameController.text;
-      });
+      if (mounted) {
+        setState(() {
+          _playerName = _playerNameController.text;
+        });
+      }
+    });
+    _locationService.getCurrentPosition().then((position) {
+      if (mounted && position != null) {
+        setState(() {
+          _currentPosition = position;
+        });
+      }
+    });
+    _listenToLocationStream();
+  }
+
+  void _listenToLocationStream() {
+    _positionStreamSubscription = _locationService.getPositionStream().listen((Position position) {
+      if (mounted) {
+        setState(() {
+          _currentPosition = position;
+        });
+      }
     });
   }
 
   @override
   void dispose() {
     _playerNameController.dispose();
+    _positionStreamSubscription?.cancel();
     super.dispose();
   }
 
@@ -118,6 +147,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
               ],
+            ),
+            SizedBox(height: AppConfig.extraLargePadding),
+            
+            // Location Data
+            Text(
+              AppConfig.locationDataLabel,
+              style: TextStyle(color: AppConfig.disabledColor, fontSize: AppConfig.sectionTitleFontSize, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: AppConfig.mediumPadding),
+            Container(
+              padding: EdgeInsets.all(AppConfig.mediumPadding),
+              decoration: BoxDecoration(
+                  border: Border.all(color: AppConfig.outlineColor),
+                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(AppConfig.latitudeLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
+                      Text('${_currentPosition?.latitude ?? 'N/A'}', style: TextStyle(color: AppConfig.primaryTextColor)),
+                    ],
+                  ),
+                  SizedBox(height: AppConfig.smallPadding),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(AppConfig.longitudeLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
+                      Text('${_currentPosition?.longitude ?? 'N/A'}', style: TextStyle(color: AppConfig.primaryTextColor)),
+                    ],
+                  ),
+                  SizedBox(height: AppConfig.smallPadding),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(AppConfig.azimuthLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
+                      Text('${_currentPosition?.heading ?? 'N/A'}', style: TextStyle(color: AppConfig.primaryTextColor)),
+                    ],
+                  ),
+                  SizedBox(height: AppConfig.smallPadding),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(AppConfig.speedLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
+                      Text('${_currentPosition?.speed ?? 'N/A'}', style: TextStyle(color: AppConfig.primaryTextColor)),
+                    ],
+                  ),
+                  SizedBox(height: AppConfig.smallPadding),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(AppConfig.accuracyLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
+                      Text('${_currentPosition?.accuracy ?? 'N/A'}', style: TextStyle(color: AppConfig.primaryTextColor)),
+                    ],
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: AppConfig.extraLargePadding),
             
