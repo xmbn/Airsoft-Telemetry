@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class AppConfig {
   // UI Constants
   static const double buttonBorderRadius = 10.0;
@@ -11,12 +13,11 @@ class AppConfig {
   // Button Sizes
   static const double startButtonHeight = 60.0;
   static const double inputFieldHeight = 48.0;
-  static const double eventLogHeight = 120.0;
   
   // Font Sizes
   static const double eventButtonFontSize = 24.0;
   static const double startButtonFontSize = 18.0;
-  static const double regularFontSize = 16.0;
+  static const double sectionTitleFontSize = 16.0;
   
   // Intervals (in seconds)
   static const List<String> intervalOptions = [
@@ -53,4 +54,16 @@ class AppConfig {
   static const String hitEvent = 'HIT';
   static const String spawnEvent = 'SPAWN';
   static const String killEvent = 'KILL';
+
+  // Colors
+  static const Color primaryColor = Colors.deepPurple;
+  static const Color scaffoldBackgroundColor = Colors.black;
+  static const Color primaryTextColor = Colors.white;
+  static const Color disabledColor = Colors.grey;
+  static const Color outlineColor = Colors.grey;
+  static const Color surfaceColor = Color(0xFF212121); // Colors.grey[900]
+  static const Color buttonBackgroundColor = Colors.black;
+  static const Color hitColor = Colors.red;
+  static const Color spawnColor = Colors.green;
+  static const Color killColor = Colors.amber;
 }

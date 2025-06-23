@@ -41,8 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: OutlinedButton(
                 onPressed: _isTracking ? null : _startSession,
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: _isTracking ? Colors.grey : Colors.white),
-                  backgroundColor: Colors.black,
+                  side: BorderSide(color: _isTracking ? AppConfig.disabledColor : AppConfig.primaryTextColor),
+                  backgroundColor: AppConfig.buttonBackgroundColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                   ),
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   AppConfig.startLabel,
                   style: TextStyle(
-                    color: _isTracking ? Colors.grey : Colors.white,
+                    color: _isTracking ? AppConfig.disabledColor : AppConfig.primaryTextColor,
                     fontSize: AppConfig.startButtonFontSize,
                     fontWeight: FontWeight.bold,
                   ),
@@ -70,14 +70,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         _recordEvent(AppConfig.hitEvent);
                       },
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        side: const BorderSide(color: Colors.red),
+                        backgroundColor: AppConfig.buttonBackgroundColor,
+                        side: const BorderSide(color: AppConfig.hitColor),
                         minimumSize: const Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: const Text(AppConfig.hitLabel, style: TextStyle(color: Colors.red, fontSize: AppConfig.eventButtonFontSize)),
+                      child: const Text(AppConfig.hitLabel, style: TextStyle(color: AppConfig.hitColor, fontSize: AppConfig.eventButtonFontSize)),
                     ),
                   ),
                   const SizedBox(height: AppConfig.largePadding),
@@ -88,14 +88,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         _recordEvent(AppConfig.spawnEvent);
                       },
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        side: const BorderSide(color: Colors.green),
+                        backgroundColor: AppConfig.buttonBackgroundColor,
+                        side: const BorderSide(color: AppConfig.spawnColor),
                         minimumSize: const Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: const Text(AppConfig.spawnLabel, style: TextStyle(color: Colors.green, fontSize: AppConfig.eventButtonFontSize)),
+                      child: const Text(AppConfig.spawnLabel, style: TextStyle(color: AppConfig.spawnColor, fontSize: AppConfig.eventButtonFontSize)),
                     ),
                   ),
                   const SizedBox(height: AppConfig.largePadding),
@@ -106,14 +106,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         _recordEvent(AppConfig.killEvent);
                       },
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        side: const BorderSide(color: Colors.amber),
+                        backgroundColor: AppConfig.buttonBackgroundColor,
+                        side: const BorderSide(color: AppConfig.killColor),
                         minimumSize: const Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: const Text(AppConfig.killLabel, style: TextStyle(color: Colors.amber, fontSize: AppConfig.eventButtonFontSize)),
+                      child: const Text(AppConfig.killLabel, style: TextStyle(color: AppConfig.killColor, fontSize: AppConfig.eventButtonFontSize)),
                     ),
                   ),
                 ],

@@ -34,11 +34,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppConfig.scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.all(AppConfig.standardPadding),
-        color: Colors.black,
+        color: AppConfig.scaffoldBackgroundColor,
         child: Column(
           children: [
             // Player name and interval
@@ -54,7 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(left: AppConfig.largePadding),
-                          child: Text(AppConfig.playerNameLabel, style: TextStyle(color: Colors.grey)),
+                          child: Text(AppConfig.playerNameLabel, style: TextStyle(color: AppConfig.disabledColor)),
                         ),
                         SizedBox(height: AppConfig.smallPadding),
                         SizedBox(
@@ -63,13 +63,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             controller: _playerNameController,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderSide: BorderSide(color: AppConfig.outlineColor),
                                   borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
                               focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderSide: BorderSide(color: AppConfig.outlineColor),
                                   borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
                             ),
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: AppConfig.primaryTextColor),
                           ),
                         ),
                       ],
@@ -85,28 +85,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(left: AppConfig.largePadding),
-                          child: Text(AppConfig.intervalLabel, style: TextStyle(color: Colors.grey)),
+                          child: Text(AppConfig.intervalLabel, style: TextStyle(color: AppConfig.disabledColor)),
                         ),
                         SizedBox(height: AppConfig.smallPadding),
                         SizedBox(
                           height: AppConfig.inputFieldHeight,
                           child: DropdownButtonFormField<String>(
                             isExpanded: true,
-                            dropdownColor: Colors.black,
+                            dropdownColor: AppConfig.buttonBackgroundColor,
                             value: _selectedInterval,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderSide: BorderSide(color: AppConfig.outlineColor),
                                   borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
                               focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderSide: BorderSide(color: AppConfig.outlineColor),
                                   borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
                               contentPadding: EdgeInsets.symmetric(horizontal: AppConfig.largePadding, vertical: AppConfig.smallPadding),
                             ),
                             items: AppConfig.intervalOptions
                                 .map((e) => DropdownMenuItem(
                                     value: e,
-                                    child: Text(e, style: TextStyle(color: Colors.white))))
+                                    child: Text(e, style: TextStyle(color: AppConfig.primaryTextColor))))
                                 .toList(),
                             onChanged: (value) => setState(() {
                               if (value != null) _selectedInterval = value;
@@ -128,11 +128,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey),
+                        side: BorderSide(color: AppConfig.outlineColor),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         )),
-                    child: Text(AppConfig.exportDataLabel, style: TextStyle(color: Colors.white)),
+                    child: Text(AppConfig.exportDataLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
                   ),
                 ),
                 SizedBox(width: AppConfig.mediumPadding),
@@ -140,11 +140,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey),
+                        side: BorderSide(color: AppConfig.outlineColor),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         )),
-                    child: Text(AppConfig.clearDataLabel, style: TextStyle(color: Colors.white)),
+                    child: Text(AppConfig.clearDataLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
                   ),
                 ),
               ],
@@ -154,14 +154,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // Event log
             Text(
               AppConfig.eventLogTitle,
-              style: TextStyle(color: Colors.grey, fontSize: AppConfig.regularFontSize, fontWeight: FontWeight.bold),
+              style: TextStyle(color: AppConfig.disabledColor, fontSize: AppConfig.sectionTitleFontSize, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: AppConfig.mediumPadding),
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(AppConfig.mediumPadding),
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(color: AppConfig.outlineColor),
                     borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
                 child: ListView.builder(
                   itemCount: _events.length,
@@ -169,7 +169,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     final e = _events[index];
                     return Text(
                       '${e['type']} -- Lat: ${e['lat']}, Lng: ${e['lng']}, Az: ${e['az']} @ ${e['time']}',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: AppConfig.primaryTextColor),
                     );
                   },
                 ),
