@@ -132,40 +132,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             SizedBox(height: AppConfig.extraLargePadding),
             
-            // Session controls
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
-                        )),
-                    child: Text(
-                        _isTracking
-                            ? (_isPaused ? AppConfig.resumeLabel : AppConfig.pauseLabel)
-                            : AppConfig.startLabel,
-                        style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-                SizedBox(width: AppConfig.mediumPadding),
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
-                        )),
-                    child: Text(AppConfig.stopLabel, style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: AppConfig.extraLargePadding),
-            
             // Export and clear
             Row(
               children: [
