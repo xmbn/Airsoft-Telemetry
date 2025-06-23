@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../services/app_config.dart';
-import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,22 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
       resizeToAvoidBottomInset: false,
       extendBody: false,
       extendBodyBehindAppBar: false,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text(AppConfig.appTitle, style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.settings, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsScreen()),
-              );
-            },
-          ),
-        ],
-      ),
       body: Container(
         padding: EdgeInsets.all(AppConfig.standardPadding),
         color: Colors.black,
