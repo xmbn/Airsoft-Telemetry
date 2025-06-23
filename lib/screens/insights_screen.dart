@@ -36,102 +36,100 @@ class _InsightsScreenState extends State<InsightsScreen> {
       body: Container(
         padding: EdgeInsets.all(AppConfig.standardPadding),
         color: Colors.black,
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Session Summary
-              Text(
-                'Session Summary',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Session Summary
+            Text(
+              'Session Summary',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
-              SizedBox(height: AppConfig.standardPadding),
-              
-              // Stats Cards
-              Row(
+            ),
+            SizedBox(height: AppConfig.standardPadding),
+            
+            // Stats Cards
+            Row(
+              children: [
+                Expanded(
+                  child: _buildStatCard('Total Events', _totalEvents.toString(), Colors.blue),
+                ),
+                SizedBox(width: AppConfig.mediumPadding),
+                Expanded(
+                  child: _buildStatCard('Duration', _sessionDuration, Colors.green),
+                ),
+              ],
+            ),
+            SizedBox(height: AppConfig.standardPadding),
+            
+            // Event Breakdown
+            Text(
+              'Event Breakdown',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: AppConfig.largePadding),
+            
+            // Event counts
+            _buildEventRow('HIT', _eventCounts['HIT']!, Colors.red),
+            SizedBox(height: AppConfig.mediumPadding),
+            _buildEventRow('SPAWN', _eventCounts['SPAWN']!, Colors.green),
+            SizedBox(height: AppConfig.mediumPadding),
+            _buildEventRow('KILL', _eventCounts['KILL']!, Colors.amber),
+            
+            SizedBox(height: AppConfig.extraLargePadding),
+            
+            // Recent Activity
+            Text(
+              'Recent Activity',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: AppConfig.largePadding),
+            
+            Container(
+              padding: EdgeInsets.all(AppConfig.standardPadding),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: _buildStatCard('Total Events', _totalEvents.toString(), Colors.blue),
+                  Text(
+                    'Last Event:',
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
-                  SizedBox(width: AppConfig.mediumPadding),
-                  Expanded(
-                    child: _buildStatCard('Duration', _sessionDuration, Colors.green),
+                  SizedBox(height: AppConfig.smallPadding),
+                  Text(
+                    _lastEvent,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ],
               ),
-              SizedBox(height: AppConfig.standardPadding),
-              
-              // Event Breakdown
-              Text(
-                'Event Breakdown',
+            ),
+            
+            Spacer(),
+            
+            // Navigation hint
+            Center(
+              child: Text(
+                'Swipe left/right to navigate',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                  fontSize: 12,
                 ),
               ),
-              SizedBox(height: AppConfig.largePadding),
-              
-              // Event counts
-              _buildEventRow('HIT', _eventCounts['HIT']!, Colors.red),
-              SizedBox(height: AppConfig.mediumPadding),
-              _buildEventRow('SPAWN', _eventCounts['SPAWN']!, Colors.green),
-              SizedBox(height: AppConfig.mediumPadding),
-              _buildEventRow('KILL', _eventCounts['KILL']!, Colors.amber),
-              
-              SizedBox(height: AppConfig.extraLargePadding),
-              
-              // Recent Activity
-              Text(
-                'Recent Activity',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: AppConfig.largePadding),
-              
-              Container(
-                padding: EdgeInsets.all(AppConfig.standardPadding),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Last Event:',
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
-                    ),
-                    SizedBox(height: AppConfig.smallPadding),
-                    Text(
-                      _lastEvent,
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-              
-              Spacer(),
-              
-              // Navigation hint
-              Center(
-                child: Text(
-                  'Swipe left/right to navigate',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -43,48 +43,51 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           // Custom App Bar with page indicator
-          SafeArea(
-            child: Container(
-              height: 60,
-              padding: EdgeInsets.symmetric(horizontal: AppConfig.standardPadding),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Page indicators
-                  Row(
-                    children: List.generate(_screens.length, (index) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(horizontal: AppConfig.smallPadding),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              _screenTitles[index],
-                              style: TextStyle(
-                                color: _currentIndex == index ? Colors.white : Colors.grey,
-                                fontSize: _currentIndex == index ? 16 : 14,
-                                fontWeight: _currentIndex == index ? FontWeight.bold : FontWeight.normal,
-                              ),
+          Container(
+            height: 60 + MediaQuery.of(context).padding.top,
+            padding: EdgeInsets.only(
+              left: AppConfig.standardPadding,
+              right: AppConfig.standardPadding,
+              top: MediaQuery.of(context).padding.top,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Page indicators
+                Row(
+                  children: List.generate(_screens.length, (index) {
+                    return Container(
+                      margin: EdgeInsets.symmetric(horizontal: AppConfig.smallPadding),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _screenTitles[index],
+                            style: TextStyle(
+                              color: _currentIndex == index ? Colors.white : Colors.grey,
+                              fontSize: _currentIndex == index ? 16 : 14,
+                              fontWeight: _currentIndex == index ? FontWeight.bold : FontWeight.normal,
                             ),
-                            SizedBox(height: AppConfig.smallPadding),
-                            Container(
-                              width: 6,
-                              height: 6,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: _currentIndex == index ? Colors.white : Colors.transparent,
-                              ),
+                          ),
+                          SizedBox(height: AppConfig.smallPadding),
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _currentIndex == index ? Colors.white : Colors.transparent,
                             ),
-                          ],
-                        ),
-                      );
-                    }),
-                  ),
-                ],
-              ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ),
+              ],
             ),
           ),
           // Page view
@@ -92,7 +95,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             child: PageView(
               controller: _pageController,
               onPageChanged: _onPageChanged,
-              children: _screens,
+              children: _screens.map((screen) => Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+                child: screen,
+              )).toList(),
             ),
           ),
         ],
