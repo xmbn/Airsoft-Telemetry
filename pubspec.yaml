@@ -22,7 +22,7 @@ dependencies:
   path_provider: ^2.1.3
 
   # For accessing device location (GPS).
-  location: ^7.0.0
+  geolocator: ^12.0.0
 
   # For handling runtime permissions (location, notifications, etc.).
   permission_handler: ^11.3.1
