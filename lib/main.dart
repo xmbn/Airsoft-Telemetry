@@ -66,11 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       backgroundColor: Colors.black,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.black,
         // remove AppBar title to avoid duplicate headers
         title: SizedBox.shrink(),
         centerTitle: true,
+        toolbarHeight: 0,
       ),
       body: Container(
         padding: EdgeInsets.all(16),
