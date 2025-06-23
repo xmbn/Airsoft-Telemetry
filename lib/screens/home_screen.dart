@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/app_config.dart';
 import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isTracking = false;
+  bool _isTracking = AppConfig.defaultIsTracking;
 
   void _startSession() {
     setState(() {
@@ -29,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('Airsoft Telemetry', style: TextStyle(color: Colors.white)),
+        title: Text(AppConfig.appTitle, style: TextStyle(color: Colors.white)),
         centerTitle: true,
         actions: [
           IconButton(
@@ -44,34 +45,34 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppConfig.standardPadding),
         color: Colors.black,
         child: Column(
           children: [
             // Start button
             SizedBox(
               width: double.infinity,
-              height: 60,
+              height: AppConfig.startButtonHeight,
               child: OutlinedButton(
                 onPressed: _isTracking ? null : _startSession,
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: _isTracking ? Colors.grey : Colors.white),
                   backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                   ),
                 ),
                 child: Text(
-                  'START',
+                  AppConfig.startLabel,
                   style: TextStyle(
                     color: _isTracking ? Colors.grey : Colors.white,
-                    fontSize: 18,
+                    fontSize: AppConfig.startButtonFontSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 24),
+            SizedBox(height: AppConfig.extraLargePadding),
             
             // Event buttons (fill remaining space)
             Expanded(
@@ -81,53 +82,53 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: OutlinedButton(
                       onPressed: () {
                         if (!_isTracking) _startSession();
-                        _recordEvent('HIT');
+                        _recordEvent(AppConfig.hitEvent);
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.black,
                         side: BorderSide(color: Colors.red),
                         minimumSize: Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: Text('HIT', style: TextStyle(color: Colors.red, fontSize: 24)),
+                      child: Text(AppConfig.hitLabel, style: TextStyle(color: Colors.red, fontSize: AppConfig.eventButtonFontSize)),
                     ),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: AppConfig.largePadding),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
                         if (!_isTracking) _startSession();
-                        _recordEvent('SPAWN');
+                        _recordEvent(AppConfig.spawnEvent);
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.black,
                         side: BorderSide(color: Colors.green),
                         minimumSize: Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: Text('SPAWN', style: TextStyle(color: Colors.green, fontSize: 24)),
+                      child: Text(AppConfig.spawnLabel, style: TextStyle(color: Colors.green, fontSize: AppConfig.eventButtonFontSize)),
                     ),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: AppConfig.largePadding),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
                         if (!_isTracking) _startSession();
-                        _recordEvent('KILL');
+                        _recordEvent(AppConfig.killEvent);
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.black,
                         side: BorderSide(color: Colors.amber),
                         minimumSize: Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: Text('KILL', style: TextStyle(color: Colors.amber, fontSize: 24)),
+                      child: Text(AppConfig.killLabel, style: TextStyle(color: Colors.amber, fontSize: AppConfig.eventButtonFontSize)),
                     ),
                   ),
                 ],

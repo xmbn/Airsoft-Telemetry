@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/app_config.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -8,10 +9,10 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  String _playerName = '';
-  String _selectedInterval = '2s';
-  bool _isTracking = false;
-  bool _isPaused = false;
+  String _playerName = AppConfig.defaultPlayerName;
+  String _selectedInterval = AppConfig.defaultInterval;
+  bool _isTracking = AppConfig.defaultIsTracking;
+  bool _isPaused = AppConfig.defaultIsPaused;
   final List<Map<String, String>> _events = [];
   late final TextEditingController _playerNameController;
 
@@ -39,7 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('Settings', style: TextStyle(color: Colors.white)),
+        title: Text(AppConfig.settingsTitle, style: TextStyle(color: Colors.white)),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -47,7 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppConfig.standardPadding),
         color: Colors.black,
         child: Column(
           children: [
@@ -58,26 +59,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Expanded(
                   flex: 2,
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 4.0),
+                    padding: EdgeInsets.only(right: AppConfig.smallPadding),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
-                          child: Text('Player Name', style: TextStyle(color: Colors.grey)),
+                          padding: EdgeInsets.only(left: AppConfig.largePadding),
+                          child: Text(AppConfig.playerNameLabel, style: TextStyle(color: Colors.grey)),
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: AppConfig.smallPadding),
                         SizedBox(
-                          height: 48,
+                          height: AppConfig.inputFieldHeight,
                           child: TextFormField(
                             controller: _playerNameController,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(8)),
+                                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(8)),
+                                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
                             ),
                             style: TextStyle(color: Colors.white),
                           ),
@@ -89,17 +90,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Expanded(
                   flex: 1,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
+                    padding: EdgeInsets.only(left: AppConfig.smallPadding),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
-                          child: Text('Interval', style: TextStyle(color: Colors.grey)),
+                          padding: EdgeInsets.only(left: AppConfig.largePadding),
+                          child: Text(AppConfig.intervalLabel, style: TextStyle(color: Colors.grey)),
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: AppConfig.smallPadding),
                         SizedBox(
-                          height: 48,
+                          height: AppConfig.inputFieldHeight,
                           child: DropdownButtonFormField<String>(
                             isExpanded: true,
                             dropdownColor: Colors.black,
@@ -107,13 +108,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(8)),
+                                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(8)),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
+                              contentPadding: EdgeInsets.symmetric(horizontal: AppConfig.largePadding, vertical: AppConfig.smallPadding),
                             ),
-                            items: ['1s', '2s', '3s', '4s', '5s', '10s', '30s', '60s']
+                            items: AppConfig.intervalOptions
                                 .map((e) => DropdownMenuItem(
                                     value: e,
                                     child: Text(e, style: TextStyle(color: Colors.white))))
@@ -129,7 +130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 24),
+            SizedBox(height: AppConfig.extraLargePadding),
             
             // Session controls
             Row(
@@ -138,26 +139,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey)),
+                        side: BorderSide(color: Colors.grey),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
+                        )),
                     child: Text(
                         _isTracking
-                            ? (_isPaused ? 'RESUME' : 'PAUSE')
-                            : 'START',
+                            ? (_isPaused ? AppConfig.resumeLabel : AppConfig.pauseLabel)
+                            : AppConfig.startLabel,
                         style: TextStyle(color: Colors.white)),
                   ),
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: AppConfig.mediumPadding),
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey)),
-                    child: Text('STOP', style: TextStyle(color: Colors.white)),
+                        side: BorderSide(color: Colors.grey),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
+                        )),
+                    child: Text(AppConfig.stopLabel, style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 24),
+            SizedBox(height: AppConfig.extraLargePadding),
             
             // Export and clear
             Row(
@@ -166,35 +173,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey)),
-                    child: Text('Export Data', style: TextStyle(color: Colors.white)),
+                        side: BorderSide(color: Colors.grey),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
+                        )),
+                    child: Text(AppConfig.exportDataLabel, style: TextStyle(color: Colors.white)),
                   ),
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: AppConfig.mediumPadding),
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey)),
-                    child: Text('Clear Data', style: TextStyle(color: Colors.white)),
+                        side: BorderSide(color: Colors.grey),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
+                        )),
+                    child: Text(AppConfig.clearDataLabel, style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 24),
+            SizedBox(height: AppConfig.extraLargePadding),
             
             // Event log
             Text(
-              'Event Log',
-              style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.bold),
+              AppConfig.eventLogTitle,
+              style: TextStyle(color: Colors.grey, fontSize: AppConfig.regularFontSize, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: AppConfig.mediumPadding),
             Expanded(
               child: Container(
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(AppConfig.mediumPadding),
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8)),
+                    borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
                 child: ListView.builder(
                   itemCount: _events.length,
                   itemBuilder: (context, index) {
