@@ -4,8 +4,7 @@
 *.pyc
 *.swp
 .DS_Store
-.atom/
-.build/
+.atom/ # Editor-specific temporary files
 .buildlog/
 .history
 .svn/

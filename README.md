@@ -1,16 +1,35 @@
-# airsoft_telemetry_flutter
+# Airsoft Telemetry Application
 
-A new Flutter project.
+This document provides a high-level overview of the project's core features and architecture.
 
-## Getting Started
+## Features Summary
 
-This project is a starting point for a Flutter application.
+### Local Data Storage
+- Define a schema for game events (e.g. event ID, session ID, player ID, event type, timestamp, and GPS coordinates).
+- Use a lightweight local DB (like SQLite) with asynchronous operations to insert, query, and clear events.
 
-A few resources to get you started if this is your first Flutter project:
+### Foreground Location Tracking Service
+- Build a background service that requests continuous GPS updates (using the device’s GPS API).
+- Enforce foreground operation with a persistent notification.
+- Ensure location updates are delivered at a configurable interval.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Event Capture and Game Session Management
+- Implement start, pause (or resume), and stop endpoints for game sessions.
+- Record real-time events such as "HIT", "SPAWN", and "KILL" with current location and sensor data.
+- Associate events with the current game session using a unique identifier.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Persistent User Preferences
+- Save key parameters (player name, update interval, etc.) in a persistent store.
+- Reload these settings on app startup.
+
+### Responsive, Dark-Themed Single-Screen UI
+- Create a dark mode user interface optimized for battery life.
+- Design a compact layout that displays controls (start/pause/stop and event buttons) as well as the most recent events without scrolling.
+
+### CSV Data Export
+- Add functionality to export all stored events to a CSV file.
+- Utilize the host platform’s file or data export APIs to allow user-directed file saving.
+
+### Permission Handling and Sensor Integration
+- Request and handle runtime permissions for location and notifications.
+- Optionally integrate with device sensors (e.g. accelerometer, magnetometer) for orientation data.
