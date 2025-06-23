@@ -48,17 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.black,
         child: Column(
           children: [
-            // Title
-            Text(
-              'Airsoft Telemetry',
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium
-                  ?.copyWith(color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 24),
-            
             // Start button
             SizedBox(
               width: double.infinity,
@@ -68,6 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: _isTracking ? Colors.grey : Colors.white),
                   backgroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
                 child: Text(
                   'START',
@@ -95,6 +87,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         backgroundColor: Colors.black,
                         side: BorderSide(color: Colors.red),
                         minimumSize: Size(double.infinity, 0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       child: Text('HIT', style: TextStyle(color: Colors.red, fontSize: 24)),
                     ),
@@ -110,6 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         backgroundColor: Colors.black,
                         side: BorderSide(color: Colors.green),
                         minimumSize: Size(double.infinity, 0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       child: Text('SPAWN', style: TextStyle(color: Colors.green, fontSize: 24)),
                     ),
@@ -125,6 +123,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         backgroundColor: Colors.black,
                         side: BorderSide(color: Colors.amber),
                         minimumSize: Size(double.infinity, 0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       child: Text('KILL', style: TextStyle(color: Colors.amber, fontSize: 24)),
                     ),
