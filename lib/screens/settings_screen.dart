@@ -11,8 +11,6 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   String _playerName = AppConfig.defaultPlayerName;
   String _selectedInterval = AppConfig.defaultInterval;
-  bool _isTracking = AppConfig.defaultIsTracking;
-  bool _isPaused = AppConfig.defaultIsPaused;
   final List<Map<String, String>> _events = [];
   late final TextEditingController _playerNameController;
 

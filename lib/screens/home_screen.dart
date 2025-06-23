@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       extendBody: false,
       extendBodyBehindAppBar: false,
       body: Container(
-        padding: EdgeInsets.all(AppConfig.standardPadding),
+        padding: const EdgeInsets.all(AppConfig.standardPadding),
         color: Colors.black,
         child: Column(
           children: [
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            SizedBox(height: AppConfig.extraLargePadding),
+            const SizedBox(height: AppConfig.extraLargePadding),
             
             // Event buttons (fill remaining space)
             Expanded(
@@ -71,16 +71,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.black,
-                        side: BorderSide(color: Colors.red),
-                        minimumSize: Size(double.infinity, 0),
+                        side: const BorderSide(color: Colors.red),
+                        minimumSize: const Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: Text(AppConfig.hitLabel, style: TextStyle(color: Colors.red, fontSize: AppConfig.eventButtonFontSize)),
+                      child: const Text(AppConfig.hitLabel, style: TextStyle(color: Colors.red, fontSize: AppConfig.eventButtonFontSize)),
                     ),
                   ),
-                  SizedBox(height: AppConfig.largePadding),
+                  const SizedBox(height: AppConfig.largePadding),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
@@ -89,16 +89,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.black,
-                        side: BorderSide(color: Colors.green),
-                        minimumSize: Size(double.infinity, 0),
+                        side: const BorderSide(color: Colors.green),
+                        minimumSize: const Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: Text(AppConfig.spawnLabel, style: TextStyle(color: Colors.green, fontSize: AppConfig.eventButtonFontSize)),
+                      child: const Text(AppConfig.spawnLabel, style: TextStyle(color: Colors.green, fontSize: AppConfig.eventButtonFontSize)),
                     ),
                   ),
-                  SizedBox(height: AppConfig.largePadding),
+                  const SizedBox(height: AppConfig.largePadding),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
@@ -107,13 +107,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.black,
-                        side: BorderSide(color: Colors.amber),
-                        minimumSize: Size(double.infinity, 0),
+                        side: const BorderSide(color: Colors.amber),
+                        minimumSize: const Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: Text(AppConfig.killLabel, style: TextStyle(color: Colors.amber, fontSize: AppConfig.eventButtonFontSize)),
+                      child: const Text(AppConfig.killLabel, style: TextStyle(color: Colors.amber, fontSize: AppConfig.eventButtonFontSize)),
                     ),
                   ),
                 ],
