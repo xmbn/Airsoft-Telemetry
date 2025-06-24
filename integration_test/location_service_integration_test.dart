@@ -35,7 +35,21 @@ void main() {
         expect(position.longitude, greaterThanOrEqualTo(-180));
         expect(position.longitude, lessThanOrEqualTo(180));
         
-        print('Location obtained: ${position.latitude}, ${position.longitude}');
+        // Print all possible Position fields
+        print('--- Location Details ---');
+        print('Latitude: ${position.latitude}');
+        print('Longitude: ${position.longitude}');
+        print('Accuracy: ${position.accuracy}');
+        print('Altitude: ${position.altitude}');
+        print('Speed: ${position.speed}');
+        print('Speed Accuracy: ${position.speedAccuracy}');
+        print('Heading: ${position.heading}');
+        print('Heading Accuracy: ${position.headingAccuracy}');
+        print('Timestamp: ${position.timestamp}');
+        print('Floor: ${position.floor}');
+        print('Is Mocked: ${position.isMocked}');
+        print('Altitude Accuracy: ${position.altitudeAccuracy}');
+        print('-----------------------');
       } else {
         // If position is null, it could be due to permissions or service issues
         print('Location service returned null - checking permission status');

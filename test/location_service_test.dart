@@ -57,7 +57,9 @@ void main() {
           .thenAnswer((_) async => LocationPermission.always);
       when(() => mockGeolocator.getCurrentPosition(
             locationSettings: any(named: 'locationSettings'),
-          )).thenAnswer((_) async => fakePosition);      final result = await locationService.getCurrentPosition();
+          )).thenAnswer((_) async => fakePosition);
+      
+      final result = await locationService.getCurrentPosition();
       expect(result, equals(fakePosition));
     }, tags: ['unit']);
 
@@ -82,7 +84,9 @@ void main() {
           .thenAnswer((_) async => LocationPermission.always);
       when(() => mockGeolocator.getPositionStream(
             locationSettings: any(named: 'locationSettings'),
-          )).thenAnswer((_) => Stream.value(fakePosition));      final stream = locationService.getPositionStream();
+          )).thenAnswer((_) => Stream.value(fakePosition));
+      
+      final stream = locationService.getPositionStream();
       expect(await stream.first, equals(fakePosition));
     }, tags: ['unit']);
 
@@ -92,7 +96,9 @@ void main() {
       when(() => mockGeolocator.checkPermission())
           .thenAnswer((_) async => LocationPermission.denied);
       when(() => mockGeolocator.requestPermission())
-          .thenAnswer((_) async => LocationPermission.denied);      final stream = locationService.getPositionStream();
+          .thenAnswer((_) async => LocationPermission.denied);
+      
+      final stream = locationService.getPositionStream();
       expect(await stream.isEmpty, isTrue);
     }, tags: ['unit']);
   });
