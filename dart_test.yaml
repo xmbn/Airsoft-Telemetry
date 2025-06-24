@@ -1,0 +1,19 @@
+# Configuration for dart test runner
+# https://dart.dev/tools/dart-test#configuration
+
+tags:
+  unit:
+    description: "Fast unit tests that use mocks and don't require devices"
+  integration:
+    description: "Integration tests that run on real devices with actual services"
+
+# Default configuration for test runs
+test_on: "vm"
+
+# Timeout for tests (optional)
+timeout: 30s
+
+# Override timeout for integration tests
+override:
+  integration:
+    timeout: 2m
