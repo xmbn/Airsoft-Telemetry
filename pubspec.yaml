@@ -37,6 +37,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # For mocking in tests
+  mocktail: ^1.0.3
+
   # Recommended lints for Flutter projects.
   flutter_lints: ^4.0.0
 
