@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
-import 'settings_screen.dart';
-import 'insights_screen.dart';
-import '../services/app_config.dart';
+import 'package:airsoft_telemetry_flutter/screens/home_screen.dart';
+import 'package:airsoft_telemetry_flutter/screens/settings_screen.dart';
+import 'package:airsoft_telemetry_flutter/screens/insights_screen.dart';
+import 'package:airsoft_telemetry_flutter/services/app_config.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
