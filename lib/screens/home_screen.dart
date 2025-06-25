@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/app_config.dart';
+import 'package:airsoft_telemetry_flutter/services/app_config.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

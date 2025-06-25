@@ -49,6 +49,12 @@ class AppConfig {
   // Input Labels
   static const String playerNameLabel = 'Player Name';
   static const String intervalLabel = 'Interval';
+  static const String locationDataLabel = 'Location Data';
+  static const String latitudeLabel = 'Latitude';
+  static const String longitudeLabel = 'Longitude';
+  static const String azimuthLabel = 'Azimuth';
+  static const String speedLabel = 'Speed';
+  static const String accuracyLabel = 'Accuracy';
   
   // Event Types
   static const String hitEvent = 'HIT';

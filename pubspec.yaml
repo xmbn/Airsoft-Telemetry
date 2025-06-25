@@ -22,7 +22,7 @@ dependencies:
   path_provider: ^2.1.3
 
   # For accessing device location (GPS).
-  location: ^7.0.0
+  geolocator: ^12.0.0
 
   # For handling runtime permissions (location, notifications, etc.).
   permission_handler: ^11.3.1
@@ -33,9 +33,23 @@ dependencies:
   # For creating and handling CSV data for export.
   csv: ^6.0.0
 
+  plugin_platform_interface: ^2.1.8
+
 dev_dependencies:
+  # Documentation:
+  # The 'flutter_test' dependency utilizes the Flutter SDK to provide a framework for writing and running 
+  # unit tests and widget tests. It is essential for validating the correctness of individual Flutter components.
   flutter_test:
     sdk: flutter
+
+  # The 'integration_test' dependency leverages the Flutter SDK to enable end-to-end integration testing, 
+  # allowing you to simulate user interactions and verify the behavior of the complete application. This 
+  # facilitates comprehensive testing of how different parts of your app work together.
+  integration_test:
+    sdk: flutter
+
+  # For mocking in tests
+  mocktail: ^1.0.3
 
   # Recommended lints for Flutter projects.
   flutter_lints: ^4.0.0

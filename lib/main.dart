@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/main_navigation_screen.dart';
-import 'services/app_config.dart';
+import 'package:airsoft_telemetry_flutter/screens/main_navigation_screen.dart';
+import 'package:airsoft_telemetry_flutter/services/app_config.dart';
 
 void main() {
   runApp(const MyApp());
