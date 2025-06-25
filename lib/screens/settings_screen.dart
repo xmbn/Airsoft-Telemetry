@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:airsoft_telemetry_flutter/services/location_service.dart';
+import 'package:airsoft_telemetry_flutter/services/telemetry_service.dart';
+import 'package:airsoft_telemetry_flutter/services/preferences_service.dart';
+import 'package:airsoft_telemetry_flutter/services/export_service.dart';
+import 'package:airsoft_telemetry_flutter/models/game_event.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -14,25 +18,49 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  String _playerName = AppConfig.defaultPlayerName;
-  String _selectedInterval = AppConfig.defaultInterval;
-  final List<Map<String, String>> _events = [];
-  late final TextEditingController _playerNameController;
+  final TelemetryService _telemetryService = TelemetryService();
+  final PreferencesService _preferencesService = PreferencesService();
   final LocationService _locationService = LocationService();
+  final ExportService _exportService = ExportService();
+    String _playerName = AppConfig.defaultPlayerName;
+  String _selectedInterval = AppConfig.defaultInterval;
+  List<GameEvent> _events = [];
+  late final TextEditingController _playerNameController;
   Position? _currentPosition;
+  
   StreamSubscription<Position>? _positionStreamSubscription;
+  StreamSubscription<Position?>? _telemetryPositionSubscription;
+  StreamSubscription<List<GameEvent>>? _eventsSubscription;
 
   @override
   void initState() {
     super.initState();
+    // Initialize controller immediately to prevent LateInitializationError
     _playerNameController = TextEditingController(text: _playerName);
+    _initializeSettings();
+  }
+
+  Future<void> _initializeSettings() async {
+    // Initialize telemetry service
+    await _telemetryService.initialize();
+    
+    // Load preferences
+    final preferences = await _preferencesService.loadAllPreferences();
+    _playerName = preferences['playerName'] ?? AppConfig.defaultPlayerName;
+    _selectedInterval = preferences['interval'] ?? AppConfig.defaultInterval;
+    
+    // Update controller text with loaded preferences
+    _playerNameController.text = _playerName;
     _playerNameController.addListener(() {
       if (mounted) {
         setState(() {
           _playerName = _playerNameController.text;
         });
+        _savePlayerName();
       }
     });
+
+    // Get initial position
     _locationService.getCurrentPosition().then((position) {
       if (mounted && position != null) {
         setState(() {
@@ -40,7 +68,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
         });
       }
     });
+
+    // Listen to position updates
     _listenToLocationStream();
+    _listenToTelemetryUpdates();
+    
+    // Set initial state
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void _listenToLocationStream() {
@@ -53,10 +89,135 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  void _listenToTelemetryUpdates() {
+    // Listen to telemetry position updates
+    _telemetryPositionSubscription = _telemetryService.positionStream.listen((position) {
+      if (mounted && position != null) {
+        setState(() {
+          _currentPosition = position;
+        });
+      }
+    });
+
+    // Listen to recent events updates
+    _eventsSubscription = _telemetryService.recentEventsStream.listen((events) {
+      if (mounted) {
+        setState(() {
+          _events = events;
+        });
+      }
+    });
+  }
+
+  Future<void> _savePlayerName() async {
+    await _telemetryService.updatePlayerName(_playerName);
+  }
+
+  Future<void> _saveInterval() async {
+    await _telemetryService.updateInterval(_selectedInterval);
+  }  Future<void> _exportData() async {
+    if (!mounted) return;
+    
+    try {
+      final stats = await _exportService.getExportStats();
+      
+      if (stats['eventCount'] == 0) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('No data to export')),
+          );
+        }
+        return;
+      }
+
+      // Show confirmation dialog with stats
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: AppConfig.surfaceColor,
+          title: const Text('Export Data', style: TextStyle(color: AppConfig.primaryTextColor)),
+          content: Text(
+            'Export ${stats['eventCount']} events from ${stats['sessionCount']} sessions?\n\nDate range: ${stats['dateRange']}',
+            style: const TextStyle(color: AppConfig.primaryTextColor),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel', style: TextStyle(color: AppConfig.primaryTextColor)),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Export', style: TextStyle(color: Colors.green)),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed == true && mounted) {
+        final filePath = await _exportService.exportToCsv();
+        if (mounted && filePath != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Data exported to: $filePath')),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Export failed: $e')),
+        );
+      }
+    }
+  }
+  Future<void> _clearData() async {
+    if (!mounted) return;
+    
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppConfig.surfaceColor,
+        title: const Text('Clear All Data', style: TextStyle(color: AppConfig.primaryTextColor)),
+        content: const Text(
+          'This will permanently delete all recorded events. This action cannot be undone.',
+          style: TextStyle(color: AppConfig.primaryTextColor),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel', style: TextStyle(color: AppConfig.primaryTextColor)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      final count = await _telemetryService.clearAllData();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Deleted $count events')),
+        );
+      }
+    }
+  }
+
+  String _formatEventForDisplay(GameEvent event) {
+    final dateTime = DateTime.fromMillisecondsSinceEpoch(event.timestamp);
+    final timeString = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}';
+    
+    return '${event.eventType} -- Lat: ${event.latitude.toStringAsFixed(6)}, '
+           'Lng: ${event.longitude.toStringAsFixed(6)}, '
+           'Alt: ${event.altitude.toStringAsFixed(1)}m @ $timeString';
+  }
   @override
   void dispose() {
     _playerNameController.dispose();
     _positionStreamSubscription?.cancel();
+    _telemetryPositionSubscription?.cancel();
+    _eventsSubscription?.cancel();
     super.dispose();
   }
 
@@ -131,14 +292,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   borderSide: const BorderSide(color: AppConfig.outlineColor),
                                   borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
                               contentPadding: const EdgeInsets.symmetric(horizontal: AppConfig.largePadding, vertical: AppConfig.smallPadding),
-                            ),
-                            items: AppConfig.intervalOptions
+                            ),                            items: AppConfig.intervalOptions
                                 .map((e) => DropdownMenuItem(
                                     value: e,
                                     child: Text(e, style: const TextStyle(color: AppConfig.primaryTextColor))))
                                 .toList(),
                             onChanged: (value) => setState(() {
-                              if (value != null) _selectedInterval = value;
+                              if (value != null) {
+                                _selectedInterval = value;
+                                _saveInterval();
+                              }
                             }),
                           ),
                         ),
@@ -208,11 +371,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: AppConfig.extraLargePadding),
             
             // Export and clear
-            Row(
-              children: [
+            Row(              children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: _exportData,
                     style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppConfig.outlineColor),
                         shape: RoundedRectangleBorder(
@@ -224,7 +386,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(width: AppConfig.mediumPadding),
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: _clearData,
                     style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppConfig.outlineColor),
                         shape: RoundedRectangleBorder(
@@ -248,14 +410,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 padding: const EdgeInsets.all(AppConfig.mediumPadding),
                 decoration: BoxDecoration(
                     border: Border.all(color: AppConfig.outlineColor),
-                    borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
-                child: ListView.builder(
+                    borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),                child: ListView.builder(
                   itemCount: _events.length,
                   itemBuilder: (context, index) {
-                    final e = _events[index];
-                    return Text(
-                      '${e['type']} -- Lat: ${e['lat']}, Lng: ${e['lng']}, Az: ${e['az']} @ ${e['time']}',
-                      style: const TextStyle(color: AppConfig.primaryTextColor),
+                    final event = _events[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: AppConfig.smallPadding),
+                      child: Text(
+                        _formatEventForDisplay(event),
+                        style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
+                      ),
                     );
                   },
                 ),
