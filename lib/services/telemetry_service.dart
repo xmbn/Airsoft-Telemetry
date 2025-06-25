@@ -24,22 +24,40 @@ class TelemetryService {
   Position? _lastPosition;
   String _currentPlayerId = AppConfig.defaultPlayerName;
   int _intervalSeconds = 2;
-
   // Stream controllers for reactive updates
   final StreamController<SessionState> _sessionStateController = StreamController<SessionState>.broadcast();
   final StreamController<Position?> _positionController = StreamController<Position?>.broadcast();
   final StreamController<List<GameEvent>> _recentEventsController = StreamController<List<GameEvent>>.broadcast();
-
+  
+  // Cache the last emitted events to provide immediate data to new listeners
+  List<GameEvent> _cachedRecentEvents = [];
   // Getters
   SessionState get sessionState => _sessionState;
   String? get currentSessionId => _currentSessionId;
   Position? get lastPosition => _lastPosition;
   String get currentPlayerId => _currentPlayerId;
-
+  List<GameEvent> get cachedRecentEvents => List.unmodifiable(_cachedRecentEvents);
   // Streams
   Stream<SessionState> get sessionStateStream => _sessionStateController.stream;
   Stream<Position?> get positionStream => _positionController.stream;
-  Stream<List<GameEvent>> get recentEventsStream => _recentEventsController.stream;
+  Stream<List<GameEvent>> get recentEventsStream {
+    // Return a stream that immediately emits cached events, then continues with updates
+    return Stream.multi((controller) {
+      // Immediately emit cached events if available
+      if (_cachedRecentEvents.isNotEmpty) {
+        controller.add(_cachedRecentEvents);
+      }
+      
+      // Then listen to the actual stream for updates
+      final subscription = _recentEventsController.stream.listen(
+        (events) => controller.add(events),
+        onError: (error) => controller.addError(error),
+        onDone: () => controller.close(),
+      );
+      
+      controller.onCancel = () => subscription.cancel();
+    });
+  }
 
   Future<void> initialize() async {
     // Load preferences
@@ -111,7 +129,6 @@ class TelemetryService {
     // Restart location tracking
     _startLocationTracking();
   }
-
   Future<void> stopSession() async {
     if (_sessionState == SessionState.stopped) return;
 
@@ -128,6 +145,9 @@ class TelemetryService {
     _sessionState = SessionState.stopped;
     _currentSessionId = null;
     _sessionStateController.add(_sessionState);
+    
+    // Update events to show recent events from all sessions
+    await _updateRecentEvents();
   }
 
   Future<void> recordManualEvent(String eventType) async {
@@ -190,10 +210,19 @@ class TelemetryService {
   void _stopLocationTracking() {
     _locationTimer?.cancel();
     _locationTimer = null;
-  }
-
-  Future<void> _updateRecentEvents() async {
-    final events = await _databaseService.getRecentEvents(limit: 20);
+  }  Future<void> _updateRecentEvents() async {
+    List<GameEvent> events;
+    
+    if (_currentSessionId != null) {
+      // If there's an active session, show only events from the current session
+      events = await _databaseService.getEventsBySession(_currentSessionId!);
+    } else {
+      // If no active session, show recent events from all sessions
+      events = await _databaseService.getRecentEvents(limit: 20);
+    }
+    
+    // Cache the events for immediate emission to new listeners
+    _cachedRecentEvents = events;
     _recentEventsController.add(events);
   }
 
@@ -215,9 +244,9 @@ class TelemetryService {
   Future<List<GameEvent>> getAllEvents() async {
     return await _databaseService.getAllEvents();
   }
-
   Future<int> clearAllData() async {
     final count = await _databaseService.clearAllEvents();
+    _cachedRecentEvents.clear();
     await _updateRecentEvents();
     return count;
   }

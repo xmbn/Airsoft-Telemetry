@@ -88,8 +88,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       }
     });
   }
-
   void _listenToTelemetryUpdates() {
+    // Immediately load cached events to avoid empty state
+    _events = _telemetryService.cachedRecentEvents;
+    
     // Listen to telemetry position updates
     _telemetryPositionSubscription = _telemetryService.positionStream.listen((position) {
       if (mounted && position != null) {
