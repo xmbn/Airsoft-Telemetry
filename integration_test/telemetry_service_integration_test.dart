@@ -225,7 +225,8 @@ void main() {
       await telemetryService.startSession();
       
       // Wait for multiple location tracking intervals
-      await Future.delayed(const Duration(seconds: 6));
+      // With default 2s interval, we should get events at 2s, 4s, 6s, 8s
+      await Future.delayed(const Duration(seconds: 9));
       
       final sessionId = telemetryService.currentSessionId!;
       final events = await databaseService.getEventsBySession(sessionId);
@@ -233,8 +234,8 @@ void main() {
       // Count LOCATION events
       final locationEvents = events.where((e) => e.eventType == 'LOCATION').length;
       
-      // Should have at least 2-3 location events (depending on timing and interval settings)
-      expect(locationEvents, greaterThanOrEqualTo(2));
+      // Should have at least 3 location events (at 2s, 4s, 6s, and possibly 8s)
+      expect(locationEvents, greaterThanOrEqualTo(3));
       
       // Stop session
       await telemetryService.stopSession();
