@@ -29,9 +29,11 @@ dependencies:
 
   # For simple key-value storage (user preferences).
   shared_preferences: ^2.2.3
-
   # For creating and handling CSV data for export.
   csv: ^6.0.0
+
+  # For path operations in database service
+  path: ^1.8.3
 
   plugin_platform_interface: ^2.1.8
 
@@ -47,9 +49,11 @@ dev_dependencies:
   # facilitates comprehensive testing of how different parts of your app work together.
   integration_test:
     sdk: flutter
-
   # For mocking in tests
   mocktail: ^1.0.3
+
+  # For SQLite testing
+  sqflite_common_ffi: ^2.3.3
 
   # Recommended lints for Flutter projects.
   flutter_lints: ^4.0.0

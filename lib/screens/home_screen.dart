@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:airsoft_telemetry_flutter/services/app_config.dart';
+import 'package:airsoft_telemetry_flutter/services/telemetry_service.dart';
+import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,19 +12,205 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isTracking = AppConfig.defaultIsTracking;
+  final TelemetryService _telemetryService = TelemetryService();
+  SessionState _sessionState = SessionState.stopped;
+  Position? _currentPosition;
+  
+  StreamSubscription<SessionState>? _sessionStateSubscription;
+  StreamSubscription<Position?>? _positionSubscription;
 
-  void _startSession() {
+  @override
+  void initState() {
+    super.initState();
+    _initializeTelemetry();
+  }
+
+  Future<void> _initializeTelemetry() async {
+    await _telemetryService.initialize();
+    
+    // Listen to session state changes
+    _sessionStateSubscription = _telemetryService.sessionStateStream.listen((state) {
+      if (mounted) {
+        setState(() {
+          _sessionState = state;
+        });
+      }
+    });
+
+    // Listen to position updates
+    _positionSubscription = _telemetryService.positionStream.listen((position) {
+      if (mounted && position != null) {
+        setState(() {
+          _currentPosition = position;
+        });
+      }
+    });
+
+    // Set initial state
     setState(() {
-      _isTracking = true;
+      _sessionState = _telemetryService.sessionState;
+      _currentPosition = _telemetryService.lastPosition;
     });
   }
 
-  void _recordEvent(String eventType) {
-    // TODO: Implement event recording logic
-    print('Event recorded: $eventType');
+  @override
+  void dispose() {
+    _sessionStateSubscription?.cancel();
+    _positionSubscription?.cancel();
+    super.dispose();
   }
 
+  void _startSession() async {
+    await _telemetryService.startSession();
+  }
+
+  void _pauseSession() async {
+    await _telemetryService.pauseSession();
+  }
+
+  void _resumeSession() async {
+    await _telemetryService.resumeSession();
+  }
+
+  void _stopSession() async {
+    await _telemetryService.stopSession();
+  }
+
+  void _recordEvent(String eventType) async {
+    await _telemetryService.recordManualEvent(eventType);
+  }
+
+  Widget _buildControlButton() {
+    switch (_sessionState) {
+      case SessionState.stopped:
+        return SizedBox(
+          width: double.infinity,
+          height: AppConfig.startButtonHeight,
+          child: OutlinedButton(
+            onPressed: _startSession,
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: AppConfig.primaryTextColor),
+              backgroundColor: AppConfig.buttonBackgroundColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
+              ),
+            ),
+            child: const Text(
+              AppConfig.startLabel,
+              style: TextStyle(
+                color: AppConfig.primaryTextColor,
+                fontSize: AppConfig.startButtonFontSize,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        );
+      case SessionState.running:
+        return Row(
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: AppConfig.startButtonHeight,
+                child: OutlinedButton(
+                  onPressed: _pauseSession,
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.orange),
+                    backgroundColor: AppConfig.buttonBackgroundColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
+                    ),
+                  ),
+                  child: const Text(
+                    AppConfig.pauseLabel,
+                    style: TextStyle(
+                      color: Colors.orange,
+                      fontSize: AppConfig.startButtonFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: AppConfig.mediumPadding),
+            Expanded(
+              child: SizedBox(
+                height: AppConfig.startButtonHeight,
+                child: OutlinedButton(
+                  onPressed: _stopSession,
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.red),
+                    backgroundColor: AppConfig.buttonBackgroundColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
+                    ),
+                  ),
+                  child: const Text(
+                    AppConfig.stopLabel,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: AppConfig.startButtonFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      case SessionState.paused:
+        return Row(
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: AppConfig.startButtonHeight,
+                child: OutlinedButton(
+                  onPressed: _resumeSession,
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.green),
+                    backgroundColor: AppConfig.buttonBackgroundColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
+                    ),
+                  ),
+                  child: const Text(
+                    AppConfig.resumeLabel,
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: AppConfig.startButtonFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: AppConfig.mediumPadding),
+            Expanded(
+              child: SizedBox(
+                height: AppConfig.startButtonHeight,
+                child: OutlinedButton(
+                  onPressed: _stopSession,
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.red),
+                    backgroundColor: AppConfig.buttonBackgroundColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
+                    ),
+                  ),
+                  child: const Text(
+                    AppConfig.stopLabel,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: AppConfig.startButtonFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,30 +223,47 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.black,
         child: Column(
           children: [
-            // Start button
-            SizedBox(
-              width: double.infinity,
-              height: AppConfig.startButtonHeight,
-              child: OutlinedButton(
-                onPressed: _isTracking ? null : _startSession,
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: _isTracking ? AppConfig.disabledColor : AppConfig.primaryTextColor),
-                  backgroundColor: AppConfig.buttonBackgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
-                  ),
+            // Control buttons (start/pause/resume/stop)
+            _buildControlButton(),
+            const SizedBox(height: AppConfig.extraLargePadding),
+            
+            // Current position display
+            if (_currentPosition != null) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(AppConfig.mediumPadding),
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppConfig.outlineColor),
+                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius),
                 ),
-                child: Text(
-                  AppConfig.startLabel,
-                  style: TextStyle(
-                    color: _isTracking ? AppConfig.disabledColor : AppConfig.primaryTextColor,
-                    fontSize: AppConfig.startButtonFontSize,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Column(
+                  children: [
+                    Text(
+                      'Current Position',
+                      style: TextStyle(
+                        color: AppConfig.disabledColor,
+                        fontSize: AppConfig.sectionTitleFontSize,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: AppConfig.smallPadding),
+                    Text(
+                      'Lat: ${_currentPosition!.latitude.toStringAsFixed(6)}',
+                      style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
+                    ),
+                    Text(
+                      'Lng: ${_currentPosition!.longitude.toStringAsFixed(6)}',
+                      style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
+                    ),
+                    Text(
+                      'Alt: ${_currentPosition!.altitude.toStringAsFixed(1)}m',
+                      style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: AppConfig.extraLargePadding),
+              const SizedBox(height: AppConfig.extraLargePadding),
+            ],
             
             // Event buttons (fill remaining space)
             Expanded(
@@ -65,55 +271,88 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () {
-                        if (!_isTracking) _startSession();
-                        _recordEvent(AppConfig.hitEvent);
-                      },
+                      onPressed: _sessionState == SessionState.paused 
+                        ? null 
+                        : () => _recordEvent(AppConfig.hitEvent),
                       style: OutlinedButton.styleFrom(
                         backgroundColor: AppConfig.buttonBackgroundColor,
-                        side: const BorderSide(color: AppConfig.hitColor),
+                        side: BorderSide(
+                          color: _sessionState == SessionState.paused 
+                            ? AppConfig.disabledColor 
+                            : AppConfig.hitColor
+                        ),
                         minimumSize: const Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: const Text(AppConfig.hitLabel, style: TextStyle(color: AppConfig.hitColor, fontSize: AppConfig.eventButtonFontSize)),
+                      child: Text(
+                        AppConfig.hitLabel, 
+                        style: TextStyle(
+                          color: _sessionState == SessionState.paused 
+                            ? AppConfig.disabledColor 
+                            : AppConfig.hitColor, 
+                          fontSize: AppConfig.eventButtonFontSize
+                        )
+                      ),
                     ),
                   ),
                   const SizedBox(height: AppConfig.largePadding),
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () {
-                        if (!_isTracking) _startSession();
-                        _recordEvent(AppConfig.spawnEvent);
-                      },
+                      onPressed: _sessionState == SessionState.paused 
+                        ? null 
+                        : () => _recordEvent(AppConfig.spawnEvent),
                       style: OutlinedButton.styleFrom(
                         backgroundColor: AppConfig.buttonBackgroundColor,
-                        side: const BorderSide(color: AppConfig.spawnColor),
+                        side: BorderSide(
+                          color: _sessionState == SessionState.paused 
+                            ? AppConfig.disabledColor 
+                            : AppConfig.spawnColor
+                        ),
                         minimumSize: const Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: const Text(AppConfig.spawnLabel, style: TextStyle(color: AppConfig.spawnColor, fontSize: AppConfig.eventButtonFontSize)),
+                      child: Text(
+                        AppConfig.spawnLabel, 
+                        style: TextStyle(
+                          color: _sessionState == SessionState.paused 
+                            ? AppConfig.disabledColor 
+                            : AppConfig.spawnColor, 
+                          fontSize: AppConfig.eventButtonFontSize
+                        )
+                      ),
                     ),
                   ),
                   const SizedBox(height: AppConfig.largePadding),
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () {
-                        if (!_isTracking) _startSession();
-                        _recordEvent(AppConfig.killEvent);
-                      },
+                      onPressed: _sessionState == SessionState.paused 
+                        ? null 
+                        : () => _recordEvent(AppConfig.killEvent),
                       style: OutlinedButton.styleFrom(
                         backgroundColor: AppConfig.buttonBackgroundColor,
-                        side: const BorderSide(color: AppConfig.killColor),
+                        side: BorderSide(
+                          color: _sessionState == SessionState.paused 
+                            ? AppConfig.disabledColor 
+                            : AppConfig.killColor
+                        ),
                         minimumSize: const Size(double.infinity, 0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
                         ),
                       ),
-                      child: const Text(AppConfig.killLabel, style: TextStyle(color: AppConfig.killColor, fontSize: AppConfig.eventButtonFontSize)),
+                      child: Text(
+                        AppConfig.killLabel, 
+                        style: TextStyle(
+                          color: _sessionState == SessionState.paused 
+                            ? AppConfig.disabledColor 
+                            : AppConfig.killColor, 
+                          fontSize: AppConfig.eventButtonFontSize
+                        )
+                      ),
                     ),
                   ),
                 ],
