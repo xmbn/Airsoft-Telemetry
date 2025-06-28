@@ -2,7 +2,7 @@
 
 This document provides instructions for running integration tests for the Airsoft Telemetry Flutter project.
 
-## Over### Expected Test Results
+## Overall Expected Test Results
 
 ### DatabaseService Integration:
 - ✅ All CRUD operations work correctly
