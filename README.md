@@ -1,12 +1,13 @@
 # Airsoft Telemetry Flutter
 
-A production-ready Flutter application for comprehensive telemetry data collection during airsoft gaming sessions. Track player movements, record game events, and export detailed analytics with high-precision GPS coordinates and sensor data.
+A comprehensive Flutter application for telemetry data collection during airsoft gaming sessions. Track player movements, record game events, and export detailed analytics with high-precision GPS coordinates and sensor data. **Currently in active development** with core telemetry features production-ready and advanced insights features in development.
 
 ![Flutter](https://img.shields.io/badge/Flutter-3.4.3+-blue.svg)
 ![Dart](https://img.shields.io/badge/Dart-3.0+-blue.svg)
 ![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Windows-lightgrey.svg)
 ![Tests](https://img.shields.io/badge/Tests-84%20Passing-green.svg)
-![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)
+![Status](https://img.shields.io/badge/Status-In%20Development-yellow.svg)
+![Contributors](https://img.shields.io/badge/Contributors-Welcome-brightgreen.svg)
 
 ## ✨ Features
 
@@ -40,6 +41,15 @@ A production-ready Flutter application for comprehensive telemetry data collecti
 - **Platform Integration**: Native file saving using platform-specific APIs
 - **Export Statistics**: Event counts, session duration, and data size information
 - **Comprehensive Metrics**: All position data, timestamps, and event types included
+
+### 📈 **Game Insights & Analytics** *(In Development)*
+- **Session Selection**: Choose from all recorded game sessions for analysis
+- **Performance KPIs**: Kill/Death ratio, distance traveled, session duration, and average speed
+- **Combat Analytics**: Track KILL, HIT, and SPAWN events with detailed statistics
+- **Movement Analysis**: Calculate total distance traveled using GPS coordinates
+- **Session Comparison**: Compare performance metrics across multiple gaming sessions
+- **Real-time Calculations**: Automatic computation of averages, totals, and derived metrics
+- **Future Features Planned**: Interactive movement maps, time-based trend analysis, AI-powered gameplay insights
 
 ### 🖥️ **Modern User Interface**
 - **Dark Theme**: Battery-optimized interface perfect for outdoor gaming
@@ -88,6 +98,30 @@ A production-ready Flutter application for comprehensive telemetry data collecti
 - **PreferencesService**: User settings persistence and validation
 - **ExportService**: CSV generation and platform-specific file operations
 - **GameEvent Model**: Comprehensive data model with complete position metrics
+
+## 🤝 **Contributing & Development**
+
+### **AI-Powered Development**
+This project demonstrates the power of human-AI collaboration in software development. While the app was **conceptualized, designed, and orchestrated by a human developer**, the codebase is **written and managed by AI** (GitHub Copilot and Claude). This approach allows for rapid prototyping, comprehensive testing, and consistent code quality while maintaining human oversight for architecture decisions and feature planning.
+
+### **Contributors Welcome!**
+We actively welcome contributions from developers and airsoft enthusiasts! Whether you're:
+- **Airsofters who code**: Help us build features you'd actually use in the field
+- **Developers interested in Flutter**: Learn modern app development patterns
+- **Field testers**: Test the app during real airsoft games and provide feedback
+- **Data enthusiasts**: Help analyze telemetry data and suggest new insights
+
+### **How to Contribute**
+1. **Check the Issues tab** for available tasks and feature requests
+2. **Fork the repository** and create a feature branch
+3. **Test thoroughly** - we maintain high code quality standards
+4. **Submit a pull request** with detailed description of changes
+
+### **Development Approach**
+- **Human-guided AI development**: Strategic decisions by humans, implementation by AI
+- **Test-driven development**: 84 comprehensive tests ensure reliability
+- **Production-quality code**: Professional architecture and error handling
+- **Open collaboration**: Transparent development process with regular updates
 
 ## 🚀 **Getting Started**
 
@@ -215,20 +249,25 @@ CSV export includes:
 - Timestamp (milliseconds and human-readable)
 - Complete GPS data (lat, lng, altitude, azimuth, speed, accuracy)
 
-## 🏆 **Production Status**
+## 🚀 **Development Status**
 
-### **Quality Metrics**
-- ✅ **Feature Complete**: All planned functionality implemented
-- ✅ **Test Coverage**: 84 tests with 100% pass rate
-- ✅ **Code Quality**: Professional architecture with proper error handling
-- ✅ **Performance**: Optimized for battery life and memory usage
-- ✅ **User Experience**: Intuitive interface with real-time feedback
+### **Production-Ready Components**
+- ✅ **Core Telemetry System**: Complete session management and event recording
+- ✅ **Location Services**: High-precision GPS tracking with configurable intervals
+- ✅ **Data Management**: SQLite database with optimized queries and data integrity
+- ✅ **Export Functionality**: CSV export with comprehensive telemetry data
+- ✅ **User Interface**: Intuitive controls with real-time feedback and dark theme
+- ✅ **Testing**: 84 comprehensive tests with 100% pass rate
 
-### **Deployment Ready**
-- ✅ **Production Build**: Ready for release compilation
-- ✅ **Platform Support**: Android, iOS, and Windows compatibility
-- ✅ **Error Handling**: Comprehensive validation and recovery
-- ✅ **Data Integrity**: Robust persistence and export capabilities
+### **In Development**
+- 🔄 **Insights Dashboard**: Comprehensive analytics screen for session analysis
+- 🔄 **Performance KPIs**: Calculate and display game performance metrics
+- 🔄 **Session Comparison**: Compare statistics across multiple gaming sessions
+
+### **Planned Features**
+- 📋 **Interactive Maps**: Visualize movement paths and event locations
+- 📋 **Trend Analysis**: Time-based performance tracking and improvements
+- 📋 **AI Insights**: Machine learning-powered gameplay pattern analysis
 
 ## 📄 **Documentation**
 
@@ -239,32 +278,53 @@ CSV export includes:
 
 ## 🤝 **Contributing**
 
-This is a production-ready application with comprehensive testing. When contributing:
+We welcome contributions from developers, airsofters, and testers! 
 
-1. Run tests before submitting changes: `flutter test`
-2. Follow the existing architecture patterns
-3. Add tests for new functionality
-4. Update documentation as needed
+### **Available Tasks**
+Check the **Issues tab** for current tasks including:
+- Feature implementation (Insights dashboard, KPI calculations)
+- UI/UX improvements and mobile optimization
+- Testing and bug reports from field usage
+- Documentation and code improvements
+- Performance optimization and battery life enhancements
 
-## 🏆 **Key Achievements**
+### **Field Testing Needed**
+We especially need airsoft players who can:
+- Test GPS accuracy during actual games
+- Provide feedback on battery usage during long sessions  
+- Suggest new features based on real gameplay needs
+- Report bugs and edge cases found in field conditions
 
-### **Implementation Excellence**
-- **Complete Feature Set**: All originally planned features implemented and working
-- **Exceeded Expectations**: Additional features like Insights screen and advanced caching
-- **Professional Quality**: Production-ready code with comprehensive error handling
-- **Comprehensive Testing**: 84 tests covering all major functionality
+### **Development Guidelines**
+1. **Maintain test coverage**: Add tests for new functionality
+2. **Follow existing patterns**: Use the established service-layer architecture
+3. **Test on device**: GPS features require physical device testing
+4. **Document changes**: Update relevant documentation files
+
+## 🏆 **Current Achievements**
+
+### **Core System Excellence**
+- **Production-Ready Telemetry**: Complete session management and GPS tracking system
+- **Comprehensive Testing**: 84 tests covering all major functionality with 100% pass rate
+- **Professional Architecture**: Service-layer design with proper separation of concerns
+- **Robust Data Management**: SQLite database with optimized queries and data integrity
 
 ### **Technical Highlights**
 - **Stream-Based Architecture**: Real-time reactive updates throughout the UI
 - **Efficient Resource Management**: Proper disposal and memory optimization
 - **Battery Optimization**: Timer-based GPS tracking instead of continuous polling
-- **Data Integrity**: Atomic database operations with validation
+- **Cross-Platform Support**: Android, iOS, and Windows compatibility
 
 ### **User Experience**
 - **Intuitive Interface**: Context-aware controls that adapt to session state
 - **Real-Time Feedback**: Live position updates and event logging
 - **Dark Theme**: Battery-optimized UI perfect for outdoor gaming
-- **Seamless Navigation**: Multi-screen app with smooth transitions
+- **Export Functionality**: Complete CSV export of telemetry data
+
+### **Development Innovation**
+- **AI-Human Collaboration**: Demonstrating effective human-guided AI development
+- **Open Development**: Transparent process welcoming community contributions
+- **Field-Tested Approach**: Designed by airsoft players for airsoft players
 
 ## 📄 **License**
 
@@ -272,6 +332,7 @@ This project is available for use in airsoft gaming applications and educational
 
 ---
 
-**Status**: Production Ready ✅  
-**Last Updated**: June 28, 2025  
+**Status**: In Active Development (Core Features Production-Ready) 🔄  
+**Contributors**: Welcome - Check Issues Tab for Tasks 🤝  
+**Last Updated**: June 29, 2025  
 **Version**: 1.0.0+1
