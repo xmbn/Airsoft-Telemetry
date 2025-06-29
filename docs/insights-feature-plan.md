@@ -1,7 +1,7 @@
 # Insights Feature Implementation Plan
 
 ## Overview
-Transform the current placeholder Insights screen into a comprehensive analytics dashboard that allows users to select game sessions and view detailed KPIs and statistics.
+Transform the current placeholder Insights screen into a comprehensive analytics dashboard that allows users to select game sessions and view detailed KPIs and statistics. This implementation serves as the foundation for future advanced features including mapping visualization, time trend analysis, and AI-powered insights.
 
 ## Current State Analysis
 
@@ -75,11 +75,16 @@ class SessionKPIs {
   final int kills;
   final int deaths; // HIT events
   final int spawns;
-  final double kda; // kills/deaths ratio
+  final int kd; // kills-deaths
   final double avgSpeed; // m/s
   final String sessionDate;
   final int totalEvents;
   final bool isCompleteSession; // has both START and STOP events
+  
+  // Extended data for future features
+  final List<GameEvent> locationEvents; // For mapping visualization
+  final List<GameEvent> combatEvents; // For AI analysis patterns
+  final Map<String, dynamic> rawMetrics; // Extensible metrics storage
   
   SessionKPIs({
     required this.sessionId,
@@ -88,11 +93,14 @@ class SessionKPIs {
     required this.kills,
     required this.deaths,
     required this.spawns,
-    required this.kda,
+    required this.kd,
     required this.avgSpeed,
     required this.sessionDate,
     required this.totalEvents,
     required this.isCompleteSession,
+    required this.locationEvents,
+    required this.combatEvents,
+    required this.rawMetrics,
   });
   
   String get formattedDuration {
@@ -118,11 +126,28 @@ class SessionKPIs {
     }
   }
   
-  String get formattedKDA {
-    if (deaths == 0) {
-      return kills > 0 ? '∞' : '0.00';
+  String get formattedKD {
+    return kd.toString();
+  }
+  
+  // Future-ready data accessors
+  List<LatLng> get movementPath => locationEvents
+      .map((e) => LatLng(e.latitude, e.longitude))
+      .toList();
+      
+  Map<String, int> get hourlyActivity {
+    final Map<String, int> activity = {};
+    for (final event in combatEvents) {
+      final hour = DateTime.fromMillisecondsSinceEpoch(event.timestamp).hour;
+      final key = '${hour.toString().padLeft(2, '0')}:00';
+      activity[key] = (activity[key] ?? 0) + 1;
     }
-    return kda.toStringAsFixed(2);
+    return activity;
+  }
+  
+  double get combatEfficiency {
+    if (kills + deaths == 0) return 0.0;
+    return kills / (kills + deaths);
   }
 }
 ```
@@ -149,7 +174,7 @@ class AnalyticsService {
       kills: _countEventType(events, 'KILL'),
       deaths: _countEventType(events, 'HIT'),
       spawns: _countEventType(events, 'SPAWN'),
-      kda: _calculateKDA(events),
+      kd: _calculateKD(events),
       avgSpeed: _calculateAverageSpeed(events),
       sessionDate: _formatSessionDate(events),
       totalEvents: events.length,
@@ -217,13 +242,11 @@ class AnalyticsService {
     return Duration(milliseconds: stopEvent.timestamp - startEvent.timestamp);
   }
   
-  // Calculate K/D ratio
-  double _calculateKDA(List<GameEvent> events) {
+  // Calculate K-D
+  int _calculateKD(List<GameEvent> events) {
     final kills = _countEventType(events, 'KILL');
     final deaths = _countEventType(events, 'HIT');
-    
-    if (deaths == 0) return kills.toDouble();
-    return kills / deaths;
+    return kills - deaths;
   }
   
   // Calculate average speed during movement
@@ -475,7 +498,7 @@ class KPICardsGrid extends StatelessWidget {
           children: [
             Expanded(child: _buildKPICard('Deaths', kpis!.deaths.toString(), Colors.red)),
             const SizedBox(width: AppConfig.mediumPadding),
-            Expanded(child: _buildKPICard('K/D Ratio', kpis!.formattedKDA, Colors.purple)),
+            Expanded(child: _buildKPICard('KD', kpis!.formattedKD, Colors.purple)),
             const SizedBox(width: AppConfig.mediumPadding),
             Expanded(child: _buildKPICard('Spawns', kpis!.spawns.toString(), Colors.cyan)),
           ],
@@ -883,6 +906,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
    - Implement KPI calculations (duration, kills, deaths, K/D ratio)
    - Implement session validation and completeness checking
    - Add comprehensive error handling
+   - **Future-ready design**: Structure data for mapping, trends, and AI analysis
+   - Include placeholder methods for extended metrics and trend calculations
 
 ### Phase 3: UI Components
 1. **Create reusable widgets**:
@@ -895,6 +920,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
    - Empty states when no data available
    - Error states with retry options
    - Consistent dark theme styling
+   - **Navigation hooks**: Prepare UI for future feature navigation
+   - **Extensible layout**: Design to accommodate additional features
 
 ### Phase 4: Screen Integration
 1. **Rebuild InsightsScreen**:
@@ -902,22 +929,27 @@ class _InsightsScreenState extends State<InsightsScreen> {
    - Add state management for session selection
    - Implement loading and error handling
    - Add refresh functionality
+   - **Future feature placeholders**: Include disabled buttons/previews for upcoming features
+   - **Navigation preparation**: Add method stubs for future feature navigation
 
 ### Phase 5: Testing and Polish
 1. **Unit tests**:
    - Analytics calculations (distance, duration, K/D ratio)
    - Data model serialization/deserialization
    - Database query methods
+   - **Extended metrics validation**: Test placeholder methods for future features
 
 2. **Integration tests**:
    - End-to-end session selection workflow
    - Analytics calculation with real data
    - Error handling scenarios
+   - **Future compatibility**: Ensure data structures support upcoming features
 
 3. **Performance optimization**:
    - Caching for frequently accessed data
    - Background processing for heavy calculations
    - Memory management for large datasets
+   - **Scalability**: Optimize for future multi-session analysis and mapping data
 
 ## 6. Key Algorithms
 
@@ -982,21 +1014,80 @@ bool _isCompleteSession(List<GameEvent> events) {
 - High contrast colors for visual elements
 - Keyboard navigation support
 
-## 9. Future Enhancements (Post-MVP)
+## 9. Future Enhancements & Integration Readiness
 
-### Advanced Analytics
-- **Movement patterns**: Heatmap visualization of player movement
-- **Performance trends**: Analytics across multiple sessions
-- **Comparative analysis**: Compare session performance over time
+### Mapping Feature Integration
+Our current implementation provides a solid foundation for the upcoming mapping feature:
 
-### Data Export
-- **Session reports**: Export individual session analytics as PDF
-- **Trend analysis**: Export performance trends over time
-- **Custom date ranges**: Filter analytics by date ranges
+**Data Structures Ready:**
+- `SessionKPIs.locationEvents` - Contains all GPS coordinates for route visualization
+- `SessionKPIs.movementPath` - Preprocessed LatLng list for mapping libraries
+- `getLocationEventsForMapping()` - Optimized database query for map data
+- Haversine distance calculation - Ready for route drawing and zone analysis
 
-### Visualization Improvements
-- **Interactive charts**: Tap to see detailed information
-- **Timeline view**: Visual timeline of events during session
-- **Map integration**: Show movement path on map
+**Future Mapping Capabilities:**
+- **Route Visualization**: Plot player movement path on interactive maps
+- **Heat Maps**: Show activity intensity across different areas
+- **Zone Analysis**: Identify hotspots, safe zones, and tactical positions
+- **Multi-Session Overlay**: Compare movement patterns across sessions
 
-This comprehensive plan provides a solid foundation for implementing the Insights feature while maintaining the high quality and professional standards of the existing codebase. The separation of concerns between database operations and analytics calculations ensures clean, maintainable code that can be easily tested and extended.
+### Time Trends Analysis Integration
+The analytics service is structured to support comprehensive trend analysis:
+
+**Trend-Ready Data:**
+- `calculateTrendMetrics()` - Framework for multi-session analysis
+- `getSessionsByDateRange()` - Time-based session filtering
+- `SessionKPIs.hourlyActivity` - Temporal pattern data
+- `SessionKPIs.rawMetrics` - Extensible metrics storage for trend calculations
+
+**Future Trend Capabilities:**
+- **Performance Evolution**: Track K/D ratio, distance, and accuracy improvements
+- **Tactical Development**: Analyze changes in movement patterns and engagement styles
+- **Seasonal Analysis**: Identify performance variations over time
+- **Comparative Benchmarking**: Compare against historical performance
+
+### AI-Powered Analysis Integration
+Extended metrics collection prepares for AI-driven insights:
+
+**AI-Ready Metrics:**
+- `SessionKPIs.combatEvents` - Combat pattern data for tactical analysis
+- Extended metrics: movement intensity, combat frequency, spatial distribution
+- Reaction times and engagement duration data
+- Temporal and spatial pattern recognition data
+
+**Future AI Capabilities:**
+- **Tactical Recommendations**: AI-suggested improvements based on performance patterns
+- **Opponent Analysis**: Pattern recognition for competitive advantages
+- **Skill Assessment**: Automated evaluation of tactical skills and decision-making
+- **Predictive Analytics**: Forecast performance trends and optimal strategies
+
+### Data Architecture Benefits
+The current design provides several advantages for future features:
+
+1. **Extensible Models**: `SessionKPIs.rawMetrics` allows adding new metrics without schema changes
+2. **Efficient Queries**: Database methods optimized for batch processing and date ranges
+3. **Modular Analytics**: Separate service layer enables easy extension for specialized analysis
+4. **Future-Proof Navigation**: UI includes placeholder navigation for upcoming features
+5. **Scalable Data Processing**: Performance optimizations support complex multi-session analysis
+
+### Implementation Considerations for Future Features
+
+**Mapping Feature:**
+- Leverage existing location event structure
+- Reuse distance calculation algorithms
+- Extend UI components for map integration
+- Utilize cached location data for performance
+
+**Time Trends Feature:**
+- Build upon session date filtering
+- Extend analytics service trend methods
+- Create new visualization components
+- Implement data aggregation strategies
+
+**AI Analysis Feature:**
+- Utilize extended metrics collection
+- Implement machine learning data pipelines
+- Create AI insight presentation components
+- Develop recommendation engines
+
+This foundation ensures smooth integration of upcoming features while maintaining code quality and performance standards.
