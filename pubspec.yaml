@@ -1,5 +1,5 @@
 name: airsoft_telemetry_flutter
-description: "A new Flutter project."
+description: "Flutter app for Airsoft Telemetry, providing real-time data tracking and analysis for airsoft players."
 
 # Prevents accidental publishing to pub.dev.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
