@@ -1,0 +1,41 @@
+# .github/workflows/build.yml
+name: Build on Tag Push
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers on tags like v1.0.0, v1.2.3, etc.
+
+jobs:
+  build-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Update version in pubspec.yaml
+        run: |
+          # The tag from GitHub is like 'v1.2.4'. We need to remove the 'v'.
+          VERSION_NAME="${{ github.ref_name }}"
+          VERSION_NAME_NO_V="${VERSION_NAME#v}"
+
+          # The build number can be the unique run number from GitHub Actions.
+          BUILD_NUMBER=${{ github.run_number }}
+
+          # Use Perl for a cross-platform compatible sed-like replacement.
+          perl -pi -e "s/version: .*/version: $VERSION_NAME_NO_V+$BUILD_NUMBER/" pubspec.yaml
+
+          echo "Updated pubspec.yaml to version: $VERSION_NAME_NO_V+$BUILD_NUMBER"
+          cat pubspec.yaml
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Android App Bundle
+        run: flutter build appbundle
+        # Add other build commands here (e.g., flutter build apk, flutter build ipa)

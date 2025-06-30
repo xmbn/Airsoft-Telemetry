@@ -4,7 +4,7 @@ A comprehensive **Flutter mobile application** for Android and iOS devices desig
 
 ![Flutter](https://img.shields.io/badge/Flutter-3.4.3+-blue.svg)
 ![Dart](https://img.shields.io/badge/Dart-3.0+-blue.svg)
-![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Windows-lightgrey.svg)
+![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-lightgrey.svg)
 ![Tests](https://img.shields.io/badge/Tests-84%20Passing-green.svg)
 ![Status](https://img.shields.io/badge/Status-In%20Development-yellow.svg)
 ![Contributors](https://img.shields.io/badge/Contributors-Welcome-brightgreen.svg)
