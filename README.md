@@ -1,6 +1,6 @@
-# Airsoft Telemetry Flutter
+# **AIRSOFT** Telemetry Mobile App
 
-A comprehensive Flutter application for telemetry data collection during airsoft gaming sessions. Track player movements, record game events, and export detailed analytics with high-precision GPS coordinates and sensor data. **Currently in active development** with core telemetry features production-ready and advanced insights features in development.
+A comprehensive **Flutter mobile application** for Android and iOS devices designed for telemetry data collection during **airsoft** gaming sessions. Track player movements, record game events, and export detailed analytics with high-precision GPS coordinates and sensor data. **Currently in active development** with core telemetry features production-ready and advanced insights features in development.
 
 ![Flutter](https://img.shields.io/badge/Flutter-3.4.3+-blue.svg)
 ![Dart](https://img.shields.io/badge/Dart-3.0+-blue.svg)
@@ -8,6 +8,27 @@ A comprehensive Flutter application for telemetry data collection during airsoft
 ![Tests](https://img.shields.io/badge/Tests-84%20Passing-green.svg)
 ![Status](https://img.shields.io/badge/Status-In%20Development-yellow.svg)
 ![Contributors](https://img.shields.io/badge/Contributors-Welcome-brightgreen.svg)
+
+## 🤝 **Looking for Contributors!**
+
+**We're actively seeking contributors to help make this the ultimate AIRSOFT telemetry app!** Whether you're an **airsofter** who codes, a Flutter developer, a field tester, or a data enthusiast - we'd love your help. This project demonstrates innovative human-AI collaboration in software development, and we welcome contributors of all skill levels.
+
+**Ready to contribute?** Jump to our [Contributing & Development](#-contributing--development) section to get started!
+
+## 📋 **Table of Contents**
+
+- [✨ Features](#✨-features)
+- [🏗️ Architecture](#🏗️-architecture)
+- [🤝 Contributing & Development](#🤝-contributing--development)
+- [🚀 Getting Started](#🚀-getting-started)
+- [📱 App Usage Guide](#📱-app-usage-guide)
+- [🧪 Testing](#🧪-testing)
+- [📋 Dependencies](#📋-dependencies)
+- [🔧 Configuration](#🔧-configuration)
+- [🚀 Development Status](#🚀-development-status)
+- [📄 Documentation](#📄-documentation)
+- [🏆 Current Achievements](#🏆-current-achievements)
+- [📄 License](#📄-license)
 
 ## ✨ Features
 
@@ -58,6 +79,8 @@ A comprehensive Flutter application for telemetry data collection during airsoft
 - **Event Log**: Live display of recent events with formatted coordinates
 - **Multi-Screen Navigation**: Home, Settings, and Insights screens with smooth transitions
 
+[↑ Back to Table of Contents](#📋-table-of-contents)
+
 ## 🏗️ **Architecture**
 
 ### **Service Layer Architecture**
@@ -99,29 +122,54 @@ A comprehensive Flutter application for telemetry data collection during airsoft
 - **ExportService**: CSV generation and platform-specific file operations
 - **GameEvent Model**: Comprehensive data model with complete position metrics
 
+[↑ Back to Table of Contents](#📋-table-of-contents)
+
 ## 🤝 **Contributing & Development**
 
 ### **AI-Powered Development**
 This project demonstrates the power of human-AI collaboration in software development. While the app was **conceptualized, designed, and orchestrated by a human developer**, the codebase is **written and managed by AI** (GitHub Copilot and Claude). This approach allows for rapid prototyping, comprehensive testing, and consistent code quality while maintaining human oversight for architecture decisions and feature planning.
 
 ### **Contributors Welcome!**
-We actively welcome contributions from developers and airsoft enthusiasts! Whether you're:
+We actively welcome contributions from developers and **AIRSOFT** enthusiasts! Whether you're:
 - **Airsofters who code**: Help us build features you'd actually use in the field
 - **Developers interested in Flutter**: Learn modern app development patterns
-- **Field testers**: Test the app during real airsoft games and provide feedback
+- **Field testers**: Test the app during real **AIRSOFT** games and provide feedback
 - **Data enthusiasts**: Help analyze telemetry data and suggest new insights
 
 ### **How to Contribute**
 1. **Check the Issues tab** for available tasks and feature requests
-2. **Fork the repository** and create a feature branch
-3. **Test thoroughly** - we maintain high code quality standards
+2. **Fork the repository** and create a feature, bug, or refactor branch
+3. **Test thoroughly** - we maintain high code quality standards requireing unit tests and integration tests
 4. **Submit a pull request** with detailed description of changes
+
+### **Available Tasks**
+Check the **Issues tab** for current tasks including:
+- Feature implementation (Insights dashboard, KPI calculations)
+- UI/UX improvements and mobile optimization
+- Testing and bug reports from field usage
+- Documentation and code improvements
+- Performance optimization and battery life enhancements
+
+### **Field Testing Needed**
+We especially need **AIRSOFT** players who can:
+- Test GPS accuracy during actual games
+- Provide feedback on battery usage during long sessions  
+- Suggest new features based on real gameplay needs
+- Report bugs and edge cases found in field conditions
+
+### **Development Guidelines**
+1. **Maintain test coverage**: Add tests for new functionality
+2. **Follow existing patterns**: Use the established service-layer architecture
+3. **Test on device**: GPS features require physical device testing
+4. **Document changes**: Update relevant documentation files
 
 ### **Development Approach**
 - **Human-guided AI development**: Strategic decisions by humans, implementation by AI
-- **Test-driven development**: 84 comprehensive tests ensure reliability
+- **Test-driven development**: 84 comprehensive unit and integration tests ensure reliability
 - **Production-quality code**: Professional architecture and error handling
 - **Open collaboration**: Transparent development process with regular updates
+
+[↑ Back to Table of Contents](#📋-table-of-contents)
 
 ## 🚀 **Getting Started**
 
@@ -163,7 +211,11 @@ flutter test integration_test/
 flutter analyze
 ```
 
-## 📱 **Usage Guide**
+📖 **For detailed testing instructions and guidelines, see our [Testing Guide](docs/testing-guide.md)**
+
+[↑ Back to Table of Contents](#📋-table-of-contents)
+
+## 📱 **App Usage Guide**
 
 ### **Starting a Session**
 1. Open the app and navigate to the **Settings** screen by swiping right
@@ -189,7 +241,11 @@ flutter analyze
 - **Session Filtering**: Data organized by unique session IDs
 - **Automatic Backup**: All data persisted locally in SQLite database
 
+[↑ Back to Table of Contents](#📋-table-of-contents)
+
 ## 🧪 **Testing**
+
+📖 **For comprehensive testing instructions and best practices, see our [Testing Guide](docs/testing-guide.md)**
 
 ### **Test Coverage**
 - **84 Total Tests**: Comprehensive coverage across all components
@@ -216,6 +272,8 @@ integration_test/
 └── telemetry_service_integration_test.dart # Complete workflows
 ```
 
+[↑ Back to Table of Contents](#📋-table-of-contents)
+
 ## 📋 **Dependencies**
 
 ### **Core Dependencies**
@@ -229,6 +287,8 @@ integration_test/
 ### **Development Dependencies**
 - **flutter_test**: Unit and widget testing framework
 - **integration_test**: End-to-end testing capabilities
+
+[↑ Back to Table of Contents](#📋-table-of-contents)
 
 ## 🔧 **Configuration**
 
@@ -249,6 +309,8 @@ CSV export includes:
 - Timestamp (milliseconds and human-readable)
 - Complete GPS data (lat, lng, altitude, azimuth, speed, accuracy)
 
+[↑ Back to Table of Contents](#📋-table-of-contents)
+
 ## 🚀 **Development Status**
 
 ### **Production-Ready Components**
@@ -265,41 +327,23 @@ CSV export includes:
 - 🔄 **Session Comparison**: Compare statistics across multiple gaming sessions
 
 ### **Planned Features**
+- 📋 **Background Service**: Enable app to continue to collect data in the background
 - 📋 **Interactive Maps**: Visualize movement paths and event locations
 - 📋 **Trend Analysis**: Time-based performance tracking and improvements
 - 📋 **AI Insights**: Machine learning-powered gameplay pattern analysis
 
+[↑ Back to Table of Contents](#📋-table-of-contents)
+
 ## 📄 **Documentation**
 
-- **Implementation Plan**: `docs/telemetry-implementation-plan.md`
-- **Testing Guide**: `docs/testing-guide.md`
-- **Integration Testing**: `docs/integration-testing-guide.md`
-- **Implementation Assessment**: `docs/implementation-assessment-june-2025.md`
+- **Implementation Plan**: [docs/telemetry-implementation-plan.md](docs/telemetry-implementation-plan.md)
+- **Testing Guide**: [docs/testing-guide.md](docs/testing-guide.md)
+- **Integration Testing**: [docs/integration-testing-guide.md](docs/integration-testing-guide.md)
+- **Implementation Assessment**: [docs/implementation-assessment-june-2025.md](docs/implementation-assessment-june-2025.md)
+- **Insights Feature Plan**: [docs/insights-feature-plan.md](docs/insights-feature-plan.md)
+- **Location Direction Properties**: [docs/location_direction_properties.md](docs/location_direction_properties.md)
 
-## 🤝 **Contributing**
-
-We welcome contributions from developers, airsofters, and testers! 
-
-### **Available Tasks**
-Check the **Issues tab** for current tasks including:
-- Feature implementation (Insights dashboard, KPI calculations)
-- UI/UX improvements and mobile optimization
-- Testing and bug reports from field usage
-- Documentation and code improvements
-- Performance optimization and battery life enhancements
-
-### **Field Testing Needed**
-We especially need airsoft players who can:
-- Test GPS accuracy during actual games
-- Provide feedback on battery usage during long sessions  
-- Suggest new features based on real gameplay needs
-- Report bugs and edge cases found in field conditions
-
-### **Development Guidelines**
-1. **Maintain test coverage**: Add tests for new functionality
-2. **Follow existing patterns**: Use the established service-layer architecture
-3. **Test on device**: GPS features require physical device testing
-4. **Document changes**: Update relevant documentation files
+[↑ Back to Table of Contents](#📋-table-of-contents)
 
 ## 🏆 **Current Achievements**
 
@@ -324,11 +368,13 @@ We especially need airsoft players who can:
 ### **Development Innovation**
 - **AI-Human Collaboration**: Demonstrating effective human-guided AI development
 - **Open Development**: Transparent process welcoming community contributions
-- **Field-Tested Approach**: Designed by airsoft players for airsoft players
+- **Field-Tested Approach**: Designed by **AIRSOFT** players for **AIRSOFT** players
+
+[↑ Back to Table of Contents](#📋-table-of-contents)
 
 ## 📄 **License**
 
-This project is available for use in airsoft gaming applications and educational purposes.
+This project is not yet covered 
 
 ---
 
