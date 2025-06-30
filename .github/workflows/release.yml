@@ -37,23 +37,10 @@ jobs:
           echo "Updated pubspec.yaml to version: $VERSION_NAME+$BUILD_NUMBER"
           cat pubspec.yaml
 
-      - name: Commit version bump
-        id: commit
+      - name: Commit and Tag version bump
         if: steps.version.outputs.changed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(release): set version to ${{ steps.version.outputs.version }}"
+          tagging_message: "${{ steps.version.outputs.version_tag }}"
           file_pattern: pubspec.yaml
-
-      - name: Create and push new tag
-        if: steps.version.outputs.changed
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/${{ steps.version.outputs.version_tag }}',
-              sha: '${{ steps.commit.outputs.commit_sha }}'
-            })
