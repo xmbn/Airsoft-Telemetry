@@ -28,7 +28,13 @@ jobs:
 
       - name: Create and push new tag
         if: steps.version.outputs.changed
-        uses: anothrNick/github-tag-action@1.67.0
+        uses: actions/github-script@v7
         with:
-          new_tag: ${{ steps.version.outputs.version_tag }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ steps.version.outputs.version_tag }}',
+              sha: context.sha
+            })
