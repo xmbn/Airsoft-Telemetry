@@ -374,7 +374,7 @@ CSV export includes:
 
 ## 📄 **License**
 
-This project is not yet covered 
+This project is not yet covered by any particular license
 
 ---
 
