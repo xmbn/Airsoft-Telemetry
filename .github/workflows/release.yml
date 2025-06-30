@@ -1,0 +1,62 @@
+# .github/workflows/release.yml
+name: Create Release and Build
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write # Required to push new tags
+
+jobs:
+  release-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetches all history for version calculation
+
+      - name: Calculate next version
+        id: version
+        uses: paulhatch/semantic-version@v5.4.0
+        with:
+          bump_each_commit: false
+
+      - name: Create and push new tag
+        if: steps.version.outputs.changed
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ steps.version.outputs.version_tag }}',
+              sha: context.sha
+            })
+
+      - name: Set up Flutter
+        if: steps.version.outputs.changed
+        uses: flutter-actions/setup-flutter@v2
+        with:
+          channel: 'stable'
+
+      - name: Update version in pubspec.yaml
+        if: steps.version.outputs.changed
+        run: |
+          VERSION_NAME="${{ steps.version.outputs.version_tag }}"
+          VERSION_NAME_NO_V="${VERSION_NAME#v}"
+          BUILD_NUMBER=${{ github.run_number }}
+          perl -pi -e "s/version: .*/version: $VERSION_NAME_NO_V+$BUILD_NUMBER/" pubspec.yaml
+          echo "Updated pubspec.yaml to version: $VERSION_NAME_NO_V+$BUILD_NUMBER"
+          cat pubspec.yaml
+
+      - name: Install dependencies
+        if: steps.version.outputs.changed
+        run: flutter pub get
+
+      - name: Build Android App Bundle
+        if: steps.version.outputs.changed
+        run: flutter build appbundle
