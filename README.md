@@ -2,9 +2,6 @@
 
 A comprehensive **Flutter mobile application** for Android and iOS devices designed for telemetry data collection during **airsoft** gaming sessions. Track player movements, record game events, and export detailed analytics with high-precision GPS coordinates and sensor data. **Currently in active development** with core telemetry features production-ready and advanced insights features in development.
 
-> add a quick overview of how the app works (user starts, collects location data at intervals, analyze data for metrics and insights. "ever wonder how for you walked". AI analysis to discover patterns in gameplay to improve performance. 
-
-
 ![Flutter](https://img.shields.io/badge/Flutter-3.4.3+-blue.svg)
 ![Dart](https://img.shields.io/badge/Dart-3.0+-blue.svg)
 ![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-lightgrey.svg)
@@ -12,18 +9,64 @@ A comprehensive **Flutter mobile application** for Android and iOS devices desig
 ![Status](https://img.shields.io/badge/Status-In%20Development-yellow.svg)
 ![Contributors](https://img.shields.io/badge/Contributors-Welcome-brightgreen.svg)
 
+## 🚀 **How It Works**
+
+Ever wonder how far you walked during that intense **AIRSOFT** battle? This app transforms your mobile device into a comprehensive telemetry system that tracks every aspect of your gameplay:
+
+1. **📍 Start Tracking**: Press start and the app begins collecting your GPS location at configurable intervals (every 1-60 seconds)
+2. **🎯 Record Events**: Tap HIT, SPAWN, or KILL buttons to log combat events with precise coordinates  
+3. **📊 Analyze Performance**: View real-time data and export detailed analytics to discover patterns in your gameplay
+4. **🤖 AI Insights**: *(Coming Soon)* Machine learning analysis to identify movement patterns, tactical tendencies, and performance improvements
+5. **📈 Improve Gameplay**: Use data-driven insights to enhance your **AIRSOFT** strategy and performance
+
+**No backend required** - everything runs entirely on your device, with optional AI analysis through your personal Gemini API, making the app easy to run and maintain without external dependencies.
+
 ## 🤝 **Looking for Contributors!**
 
-**We're actively seeking contributors to help make this the ultimate AIRSOFT telemetry app!** Whether you're an **airsofter** who codes, a Flutter developer, a field tester, or a data enthusiast - we'd love your help. This project demonstrates innovative human-AI collaboration in software development, and we welcome contributors of all skill levels.
+**We're actively seeking contributors to help make this the ultimate AIRSOFT telemetry app!** Whether you're an **airsofter** who codes, a Flutter developer, a field tester, or a data enthusiast - we'd love your help.
 
-> separate and expand on the AI collaboration because this mention is out of the blue
+**Ready to contribute?** Jump to our [Contributing & Development](#🤝-contributing--development) section to get started!
 
-**Ready to contribute?** Jump to our [Contributing & Development](#-contributing--development) section to get started!
+## 🤝 **AI-Powered Development**
+
+This project showcases an innovative approach to software development through **human-AI collaboration**. Understanding this development model helps explain the project's rapid progress, comprehensive testing, and consistent code quality.
+
+### **The Collaboration Model**
+
+- **Human Leadership**: Strategic decisions, feature planning, architecture design, and quality oversight
+- **AI Implementation**: Code writing, test creation, documentation, and iterative development
+- **Continuous Feedback**: Human guidance shapes AI output, ensuring practical and user-focused solutions
+
+### **Why This Approach Works**
+
+**Rapid Prototyping**: AI can quickly implement features based on human specifications, allowing for fast iteration and testing of ideas.
+
+**Comprehensive Testing**: AI naturally creates thorough test suites (84 tests with 100% pass rate), ensuring reliability from the start.
+
+**Consistent Quality**: AI follows established patterns and best practices consistently across the entire codebase.
+
+**Documentation Excellence**: AI maintains up-to-date documentation and clear code comments throughout development.
+
+### **Human Oversight Areas**
+
+- **Feature Prioritization**: Deciding what **AIRSOFT** players actually need
+- **User Experience**: Ensuring the app works well in field conditions  
+- **Technical Architecture**: Making strategic decisions about app structure and dependencies
+- **Community Management**: Engaging with contributors and managing feedback
+
+### **Benefits for Contributors**
+
+- **Clean Codebase**: Well-structured, thoroughly tested code that's easy to understand and extend
+- **Excellent Documentation**: Comprehensive guides and clear inline documentation
+- **Consistent Patterns**: Established architectural patterns make contributing straightforward
+- **Active Maintenance**: Regular updates and responsive issue resolution
 
 ## 📋 **Table of Contents**
 
+- [🚀 How It Works](#🚀-how-it-works)
 - [✨ Features](#✨-features)
 - [🏗️ Architecture](#🏗️-architecture)
+- [🤝 AI-Powered Development](#🤝-ai-powered-development)
 - [🤝 Contributing & Development](#🤝-contributing--development)
 - [🚀 Getting Started](#🚀-getting-started)
 - [📱 App Usage Guide](#📱-app-usage-guide)
@@ -32,61 +75,38 @@ A comprehensive **Flutter mobile application** for Android and iOS devices desig
 - [🔧 Configuration](#🔧-configuration)
 - [🚀 Development Status](#🚀-development-status)
 - [📄 Documentation](#📄-documentation)
-- [🏆 Current Achievements](#🏆-current-achievements)
 - [📄 License](#📄-license)
 
 ## ✨ Features
 
 ### 🎯 **Core Telemetry System**
 - **Session Management**: Complete start/pause/resume/stop workflow with unique session IDs
-- **Configurable Interval Tracking**: GPS snapshots at 1s, 2s, 3s, 4s, 5s, 10s, 30s, or 60s intervals
-- **Manual Event Recording**: HIT, SPAWN, KILL events with precise GPS coordinates
-- **Automatic Event Logging**: START, STOP, PAUSE, RESUME, and LOCATION events
-- **Real-time Position Display**: Live latitude, longitude, and altitude updates
+- **Configurable GPS Tracking**: Location snapshots at 1s, 2s, 3s, 4s, 5s, 10s, 30s, or 60s intervals
+- **Event Recording**: Manual HIT, SPAWN, KILL events + automatic session events with precise GPS coordinates
+- **Real-time Updates**: Live position display with latitude, longitude, altitude, speed, accuracy, and azimuth
 
-### 📍 **Advanced Location Services**
-- **High-Precision GPS**: Comprehensive position data including latitude, longitude, altitude, speed, accuracy, and azimuth
-- **Efficient Battery Usage**: Timer-based location tracking that runs in the background optimized for extended gaming sessions
-- **Permission Management**: Seamless location permission handling with user-friendly prompts
-- **Position Streaming**: Real-time location updates throughout the application
+### 💾 **Data Management & Export**
+- **Local SQLite Storage**: All telemetry data stored locally with optimized queries and fast performance
+- **CSV Export**: Complete event data export with timestamps and comprehensive GPS metrics
+- **Data Persistence**: Settings and session data automatically saved and restored
+- **Session Organization**: Events organized by unique session IDs for easy analysis
 
-### 💾 **Robust Data Management**
-- **SQLite Database**: Local storage with optimized schema for game events and sessions
-- **Data Persistence**: All telemetry data stored locally with fast query performance
-- **Session Filtering**: Retrieve events by session ID or time range
-- **Data Integrity**: Atomic operations with proper error handling and validation
-
-### ⚙️ **Persistent User Preferences**
-- **Player Configuration**: Save player name and tracking interval settings
-- **Automatic Persistence**: Settings automatically saved and restored across app sessions
-- **Validation**: Input validation with fallback to sensible defaults
-- **Bulk Preferences**: Efficient loading and saving of all user preferences
-
-### 📊 **Data Export & Analytics**
-- **CSV Export**: Complete event data export with human-readable timestamps
-- **Platform Integration**: Native file saving using platform-specific APIs
-- **Export Statistics**: Event counts, session duration, and data size information
-- **Comprehensive Metrics**: All position data, timestamps, and event types included
-
-### 📈 **Game Insights & Analytics** *(In Development)*
-- **Session Selection**: Choose from all recorded game sessions for analysis
-- **Performance KPIs**: Kill/Death ratio, distance traveled, session duration, and average speed
-- **Combat Analytics**: Track KILL, HIT, and SPAWN events with detailed statistics
-- **Movement Analysis**: Calculate total distance traveled using GPS coordinates
+### 📈 **Game Insights** *(In Development)*
+- **Performance Analytics**: Kill/Death ratio, distance traveled, session duration, and movement statistics
 - **Session Comparison**: Compare performance metrics across multiple gaming sessions
-- **Real-time Calculations**: Automatic computation of averages, totals, and derived metrics
-- **Future Features Planned**: Interactive movement maps, time-based trend analysis, AI-powered gameplay insights
+- **Real-time Calculations**: Automatic computation of gameplay metrics and derived statistics
 
 ### 🖥️ **Modern User Interface**
 - **Dark Theme**: Battery-optimized interface perfect for outdoor gaming
-- **Reactive Updates**: Real-time UI changes based on session state and location data
-- **Intuitive Controls**: Context-aware buttons that adapt to current session state
-- **Event Log**: Live display of recent events with formatted coordinates
-- **Multi-Screen Navigation**: Home, Settings, and Insights screens with smooth transitions
+- **Multi-Screen Navigation**: Home, Settings, and Insights screens with intuitive swipe navigation
+- **Reactive Updates**: Real-time UI changes based on session state and GPS data
+- **Context-Aware Controls**: Buttons adapt to current session state for optimal user experience
 
-> add that there in no backend required, everything runs on device or through user's Gemini API, making the app easy to run and maintain
-
-> check this whole section for accuracy against the code and possibly compress it more
+### 🔒 **Privacy & Independence**
+- **No Backend Required**: Everything runs entirely on your device - no servers, no cloud dependencies
+- **Local Data Storage**: All telemetry data stored securely in local SQLite database
+- **Optional AI Analysis**: Future AI insights powered by your personal Gemini API (optional)
+- **Complete Control**: You own and control all your gameplay data
 
 [↑ Back to Table of Contents](#📋-table-of-contents)
 
@@ -135,9 +155,6 @@ A comprehensive **Flutter mobile application** for Android and iOS devices desig
 
 ## 🤝 **Contributing & Development**
 
-### **AI-Powered Development**
-This project demonstrates the power of human-AI collaboration in software development. While the app was **conceptualized, designed, and orchestrated by a human developer**, the codebase is **written and managed by AI** (GitHub Copilot and Claude). This approach allows for rapid prototyping, comprehensive testing, and consistent code quality while maintaining human oversight for architecture decisions and feature planning.
-
 ### **Contributors Welcome!**
 We actively welcome contributions from developers and **AIRSOFT** enthusiasts! Whether you're:
 - **Airsofters who code**: Help us build features you'd actually use in the field
@@ -173,10 +190,10 @@ We especially need **AIRSOFT** players who can:
 4. **Document changes**: Update relevant documentation files
 
 ### **Development Approach**
-- **Human-guided AI development**: Strategic decisions by humans, implementation by AI
 - **Test-driven development**: 84 comprehensive unit and integration tests ensure reliability
 - **Production-quality code**: Professional architecture and error handling
 - **Open collaboration**: Transparent development process with regular updates
+- **AI-assisted development**: See [AI-Powered Development](#🤝-ai-powered-development) for details
 
 [↑ Back to Table of Contents](#📋-table-of-contents)
 
@@ -226,31 +243,9 @@ flutter analyze
 
 ## 📱 **App Usage Guide**
 
-### **Starting a Session**
-1. Open the app and navigate to the **Settings** screen by swiping right
-2. Configure your **Player Name** and **Update Interval** in Settings
-3. Return to the **Home** screen.
-4. Press **START** to begin telemetry collection
-5. Use **HIT**, **SPAWN**, **KILL** buttons to record manual events
-6. **PAUSE/RESUME** or **STOP** the session as needed
+📖 **For complete usage instructions and gameplay tips, see our [User Guide](docs/user-guide.md)**
 
-### **Viewing Data**
-- **Settings Screen**: View real-time event log with coordinates
-- **Live Position**: Monitor current GPS location and accuracy
-- **Session Status**: Track active session state and recent events
-
-### **Exporting Data**
-1. Navigate to **Settings** screen
-2. Press **Export Data** button
-3. Choose save location using platform file picker
-4. Data exported as CSV with complete telemetry metrics
-
-### **Data Management**
-- **Clear All Data**: Remove all events with confirmation dialog
-- **Session Filtering**: Data organized by unique session IDs
-- **Automatic Backup**: All data persisted locally in SQLite database
-
-> Move this user guide to its own document
+**Quick Start**: Configure settings → Press START → Record events (HIT/SPAWN/KILL) → Export data for analysis
 
 [↑ Back to Table of Contents](#📋-table-of-contents)
 
@@ -347,6 +342,7 @@ CSV export includes:
 
 ## 📄 **Documentation**
 
+- **User Guide**: [docs/user-guide.md](docs/user-guide.md)
 - **Implementation Plan**: [docs/telemetry-implementation-plan.md](docs/telemetry-implementation-plan.md)
 - **Testing Guide**: [docs/testing-guide.md](docs/testing-guide.md)
 - **Integration Testing**: [docs/integration-testing-guide.md](docs/integration-testing-guide.md)
@@ -356,34 +352,7 @@ CSV export includes:
 
 [↑ Back to Table of Contents](#📋-table-of-contents)
 
-## 🏆 **Current Achievements**
 
-### **Core System Excellence**
-- **Production-Ready Telemetry**: Complete session management and GPS tracking system
-- **Comprehensive Testing**: 84 tests covering all major functionality with 100% pass rate
-- **Professional Architecture**: Service-layer design with proper separation of concerns
-- **Robust Data Management**: SQLite database with optimized queries and data integrity
-
-### **Technical Highlights**
-- **Stream-Based Architecture**: Real-time reactive updates throughout the UI
-- **Efficient Resource Management**: Proper disposal and memory optimization
-- **Battery Optimization**: Timer-based GPS tracking instead of continuous polling
-- **Cross-Platform Support**: Android, iOS, and Windows compatibility
-
-### **User Experience**
-- **Intuitive Interface**: Context-aware controls that adapt to session state
-- **Real-Time Feedback**: Live position updates and event logging
-- **Dark Theme**: Battery-optimized UI perfect for outdoor gaming
-- **Export Functionality**: Complete CSV export of telemetry data
-
-### **Development Innovation**
-- **AI-Human Collaboration**: Demonstrating effective human-guided AI development
-- **Open Development**: Transparent process welcoming community contributions
-- **Field-Tested Approach**: Designed by **AIRSOFT** players for **AIRSOFT** players
-
-> remove the current achievements section
-
-[↑ Back to Table of Contents](#📋-table-of-contents)
 
 ## 📄 **License**
 
