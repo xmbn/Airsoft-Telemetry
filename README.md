@@ -81,56 +81,31 @@ This project showcases an innovative approach to software development through **
 
 ### 🎯 **Core Telemetry System**
 - **Session Management**: Complete start/pause/resume/stop workflow with unique session IDs
-- **Configurable Interval Tracking**: GPS snapshots at 1s, 2s, 3s, 4s, 5s, 10s, 30s, or 60s intervals
-- **Manual Event Recording**: HIT, SPAWN, KILL events with precise GPS coordinates
-- **Automatic Event Logging**: START, STOP, PAUSE, RESUME, and LOCATION events
-- **Real-time Position Display**: Live latitude, longitude, and altitude updates
+- **Configurable GPS Tracking**: Location snapshots at 1s, 2s, 3s, 4s, 5s, 10s, 30s, or 60s intervals
+- **Event Recording**: Manual HIT, SPAWN, KILL events + automatic session events with precise GPS coordinates
+- **Real-time Updates**: Live position display with latitude, longitude, altitude, speed, accuracy, and azimuth
 
-### 📍 **Advanced Location Services**
-- **High-Precision GPS**: Comprehensive position data including latitude, longitude, altitude, speed, accuracy, and azimuth
-- **Efficient Battery Usage**: Timer-based location tracking that runs in the background optimized for extended gaming sessions
-- **Permission Management**: Seamless location permission handling with user-friendly prompts
-- **Position Streaming**: Real-time location updates throughout the application
+### 💾 **Data Management & Export**
+- **Local SQLite Storage**: All telemetry data stored locally with optimized queries and fast performance
+- **CSV Export**: Complete event data export with timestamps and comprehensive GPS metrics
+- **Data Persistence**: Settings and session data automatically saved and restored
+- **Session Organization**: Events organized by unique session IDs for easy analysis
 
-### 💾 **Robust Data Management**
-- **SQLite Database**: Local storage with optimized schema for game events and sessions
-- **Data Persistence**: All telemetry data stored locally with fast query performance
-- **Session Filtering**: Retrieve events by session ID or time range
-- **Data Integrity**: Atomic operations with proper error handling and validation
-
-### ⚙️ **Persistent User Preferences**
-- **Player Configuration**: Save player name and tracking interval settings
-- **Automatic Persistence**: Settings automatically saved and restored across app sessions
-- **Validation**: Input validation with fallback to sensible defaults
-- **Bulk Preferences**: Efficient loading and saving of all user preferences
-
-### 📊 **Data Export & Analytics**
-- **CSV Export**: Complete event data export with human-readable timestamps
-- **Platform Integration**: Native file saving using platform-specific APIs
-- **Export Statistics**: Event counts, session duration, and data size information
-- **Comprehensive Metrics**: All position data, timestamps, and event types included
-
-### 📈 **Game Insights & Analytics** *(In Development)*
-- **Session Selection**: Choose from all recorded game sessions for analysis
-- **Performance KPIs**: Kill/Death ratio, distance traveled, session duration, and average speed
-- **Combat Analytics**: Track KILL, HIT, and SPAWN events with detailed statistics
-- **Movement Analysis**: Calculate total distance traveled using GPS coordinates
+### 📈 **Game Insights** *(In Development)*
+- **Performance Analytics**: Kill/Death ratio, distance traveled, session duration, and movement statistics
 - **Session Comparison**: Compare performance metrics across multiple gaming sessions
-- **Real-time Calculations**: Automatic computation of averages, totals, and derived metrics
-- **Future Features Planned**: Interactive movement maps, time-based trend analysis, AI-powered gameplay insights
+- **Real-time Calculations**: Automatic computation of gameplay metrics and derived statistics
 
 ### 🖥️ **Modern User Interface**
 - **Dark Theme**: Battery-optimized interface perfect for outdoor gaming
-- **Reactive Updates**: Real-time UI changes based on session state and location data
-- **Intuitive Controls**: Context-aware buttons that adapt to current session state
-- **Event Log**: Live display of recent events with formatted coordinates
-- **Multi-Screen Navigation**: Home, Settings, and Insights screens with smooth transitions
+- **Multi-Screen Navigation**: Home, Settings, and Insights screens with intuitive swipe navigation
+- **Reactive Updates**: Real-time UI changes based on session state and GPS data
+- **Context-Aware Controls**: Buttons adapt to current session state for optimal user experience
 
 ### 🔒 **Privacy & Independence**
 - **No Backend Required**: Everything runs entirely on your device - no servers, no cloud dependencies
 - **Local Data Storage**: All telemetry data stored securely in local SQLite database
 - **Optional AI Analysis**: Future AI insights powered by your personal Gemini API (optional)
-- **Easy Deployment**: No complex setup or external service configuration needed
 - **Complete Control**: You own and control all your gameplay data
 
 [↑ Back to Table of Contents](#📋-table-of-contents)
