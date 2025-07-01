@@ -49,7 +49,7 @@ jobs:
       # - breaking: or BREAKING CHANGE -> major version bump (1.0.0 -> 2.0.0)
       - name: Calculate next version
         id: version
-        uses: paulhatch/semantic-version@v5.4.0
+        uses: paulhatch/semantic-version@v6
         with:
           bump_each_commit: false
           default_bump: false
