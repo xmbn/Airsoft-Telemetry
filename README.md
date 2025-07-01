@@ -2,6 +2,9 @@
 
 A comprehensive **Flutter mobile application** for Android and iOS devices designed for telemetry data collection during **airsoft** gaming sessions. Track player movements, record game events, and export detailed analytics with high-precision GPS coordinates and sensor data. **Currently in active development** with core telemetry features production-ready and advanced insights features in development.
 
+> add a quick overview of how the app works (user starts, collects location data at intervals, analyze data for metrics and insights. "ever wonder how for you walked". AI analysis to discover patterns in gameplay to improve performance. 
+
+
 ![Flutter](https://img.shields.io/badge/Flutter-3.4.3+-blue.svg)
 ![Dart](https://img.shields.io/badge/Dart-3.0+-blue.svg)
 ![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-lightgrey.svg)
@@ -12,6 +15,8 @@ A comprehensive **Flutter mobile application** for Android and iOS devices desig
 ## 🤝 **Looking for Contributors!**
 
 **We're actively seeking contributors to help make this the ultimate AIRSOFT telemetry app!** Whether you're an **airsofter** who codes, a Flutter developer, a field tester, or a data enthusiast - we'd love your help. This project demonstrates innovative human-AI collaboration in software development, and we welcome contributors of all skill levels.
+
+> separate and expand on the AI collaboration because this mention is out of the blue
 
 **Ready to contribute?** Jump to our [Contributing & Development](#-contributing--development) section to get started!
 
@@ -40,8 +45,8 @@ A comprehensive **Flutter mobile application** for Android and iOS devices desig
 - **Real-time Position Display**: Live latitude, longitude, and altitude updates
 
 ### 📍 **Advanced Location Services**
-- **High-Precision GPS**: Comprehensive position data including altitude, speed, accuracy, and azimuth
-- **Efficient Battery Usage**: Timer-based location tracking optimized for extended gaming sessions
+- **High-Precision GPS**: Comprehensive position data including latitude, longitude, altitude, speed, accuracy, and azimuth
+- **Efficient Battery Usage**: Timer-based location tracking that runs in the background optimized for extended gaming sessions
 - **Permission Management**: Seamless location permission handling with user-friendly prompts
 - **Position Streaming**: Real-time location updates throughout the application
 
@@ -78,6 +83,10 @@ A comprehensive **Flutter mobile application** for Android and iOS devices desig
 - **Intuitive Controls**: Context-aware buttons that adapt to current session state
 - **Event Log**: Live display of recent events with formatted coordinates
 - **Multi-Screen Navigation**: Home, Settings, and Insights screens with smooth transitions
+
+> add that there in no backend required, everything runs on device or through user's Gemini API, making the app easy to run and maintain
+
+> check this whole section for accuracy against the code and possibly compress it more
 
 [↑ Back to Table of Contents](#📋-table-of-contents)
 
@@ -241,6 +250,8 @@ flutter analyze
 - **Session Filtering**: Data organized by unique session IDs
 - **Automatic Backup**: All data persisted locally in SQLite database
 
+> Move this user guide to its own document
+
 [↑ Back to Table of Contents](#📋-table-of-contents)
 
 ## 🧪 **Testing**
@@ -369,6 +380,8 @@ CSV export includes:
 - **AI-Human Collaboration**: Demonstrating effective human-guided AI development
 - **Open Development**: Transparent process welcoming community contributions
 - **Field-Tested Approach**: Designed by **AIRSOFT** players for **AIRSOFT** players
+
+> remove the current achievements section
 
 [↑ Back to Table of Contents](#📋-table-of-contents)
 
