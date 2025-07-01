@@ -49,13 +49,12 @@ jobs:
       # - breaking: or BREAKING CHANGE -> major version bump (1.0.0 -> 2.0.0)
       - name: Calculate next version
         id: version
-        uses: paulhatch/semantic-version@v6
+        uses: paulhatch/semantic-version@v5.4.0
         with:
           bump_each_commit: false
-          default_bump: false
           major_pattern: '^(feat|fix|perf|refactor|build|ci|chore|revert)(\(.+\))?!:' # type! or type(scope)! triggers major
-          minor_pattern: '^feat(\(.+\))?:' # feat: or feat(scope): triggers minor
-          patch_pattern: '^(fix|perf)(\(.+\))?:' # fix: or perf: (performance) triggers patch
+          minor_pattern: '^(feat|fix)(\(.+\))?:' # feat: or fix: or feat(scope): or fix(scope): triggers minor
+          # patch is the default for all other commit types
 
       # Step 3: Update the Flutter pubspec.yaml file with the new version
       # This step only runs if a version change was detected by the previous step
