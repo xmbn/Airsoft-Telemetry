@@ -1,46 +1,91 @@
 # .github/workflows/release.yml
+# Automated Release Workflow for Airsoft Telemetry Flutter App
+#
+# This workflow automatically creates new releases when code is pushed to the main branch.
+# It uses semantic versioning to calculate the next version number based on commit messages
+# and conventional commit prefixes (feat:, fix:, breaking:, etc.).
+#
+# Workflow Process:
+# 1. Analyzes commit history to determine if a version bump is needed
+# 2. Calculates the next semantic version (major.minor.patch)
+# 3. Updates pubspec.yaml with the new version + build number
+# 4. Commits the version change and creates a git tag
+#
+# Version Format: MAJOR.MINOR.PATCH+BUILD_NUMBER
+# Example: 1.2.3+42 (where 42 is the GitHub run number)
+
 name: Create Release
 
+# Trigger: Runs on every push to the main branch
 on:
   push:
     branches:
       - main
 
+# Required permissions for the workflow to function
 permissions:
   contents: write # Required to push new tags and commit changes
 
 jobs:
   release:
-    # This condition prevents the workflow from running on commits made by this action
-    if: "!contains(github.event.head_commit.message, 'chore(release):')"
+    # Prevent infinite loops: Skip this workflow if the commit was made by this action itself
+    # This prevents the workflow from triggering on its own version bump commits
+    if: ${{ !contains(github.event.head_commit.message, 'chore(release):') }}
+    
     runs-on: ubuntu-latest
+    
     steps:
+      # Step 1: Checkout the repository with full git history
+      # Full history is needed for semantic versioning to analyze all commits
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetches all history for version calculation
 
+      # Step 2: Analyze commit history and calculate the next semantic version
+      # This action examines commit messages for conventional commit prefixes:
+      # - feat: -> minor version bump (1.0.0 -> 1.1.0)
+      # - fix: -> patch version bump (1.0.0 -> 1.0.1)
+      # - breaking: or BREAKING CHANGE -> major version bump (1.0.0 -> 2.0.0)
       - name: Calculate next version
         id: version
         uses: paulhatch/semantic-version@v5.4.0
         with:
-          bump_each_commit: false
+          bump_each_commit: false # Only bump version if semantic commits are found
 
-      # The following steps only run if a version change was detected
+      # Step 3: Update the Flutter pubspec.yaml file with the new version
+      # This step only runs if a version change was detected by the previous step
       - name: Update version in pubspec.yaml
         if: steps.version.outputs.changed
         run: |
-          # Use the version (e.g., 1.2.1) not the tag (v1.2.1)
+          # Extract version components for Flutter pubspec.yaml format
+          # Flutter uses version format: MAJOR.MINOR.PATCH+BUILD_NUMBER
+          # - VERSION_NAME: semantic version (e.g., 1.2.1) without 'v' prefix
+          # - BUILD_NUMBER: GitHub run number for unique builds
           VERSION_NAME="${{ steps.version.outputs.version }}"
           BUILD_NUMBER=${{ github.run_number }}
+          
+          # Update pubspec.yaml using perl for reliable regex replacement
+          # This replaces the entire "version:" line with the new version
           perl -pi -e "s/version: .*/version: $VERSION_NAME+$BUILD_NUMBER/" pubspec.yaml
+          
+          # Log the version update for debugging and transparency
           echo "Updated pubspec.yaml to version: $VERSION_NAME+$BUILD_NUMBER"
+          echo "Full pubspec.yaml content:"
           cat pubspec.yaml
 
+      # Step 4: Commit the version change and create a git tag
+      # This step creates a commit with the updated pubspec.yaml and tags it
       - name: Commit and Tag version bump
         if: steps.version.outputs.changed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
+          # Commit message format follows conventional commits
+          # The 'chore(release):' prefix is detected by the if condition above
           commit_message: "chore(release): set version to ${{ steps.version.outputs.version }}"
+          
+          # Create a git tag with the version (e.g., v1.2.1)
           tagging_message: "${{ steps.version.outputs.version_tag }}"
+          
+          # Only commit the pubspec.yaml file to keep the commit focused
           file_pattern: pubspec.yaml
