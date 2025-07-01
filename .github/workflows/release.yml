@@ -51,7 +51,11 @@ jobs:
         id: version
         uses: paulhatch/semantic-version@v5.4.0
         with:
-          bump_each_commit: false # Only bump version if semantic commits are found
+          bump_each_commit: false
+          default_bump: false
+          major_pattern: '^(feat|fix|perf|refactor|build|ci|chore|revert)(\(.+\))?!:' # type! or type(scope)! triggers major
+          minor_pattern: '^feat(\(.+\))?:' # feat: or feat(scope): triggers minor
+          patch_pattern: '^(fix|perf)(\(.+\))?:' # fix: or perf: (performance) triggers patch
 
       # Step 3: Update the Flutter pubspec.yaml file with the new version
       # This step only runs if a version change was detected by the previous step
