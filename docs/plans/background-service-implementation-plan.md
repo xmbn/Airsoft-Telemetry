@@ -97,6 +97,8 @@ flutter_background_service_ios: ^5.0.1
 
 ### 5. Testing & Mocking Strategy
 
+> Generalize this then create a separate testing plan after implementation
+
 ```dart
 // Mock location data for testing
 class MockLocationService extends LocationService {
@@ -139,6 +141,8 @@ class MockLocationService extends LocationService {
 - **Database Errors**: All database operations should be wrapped in try/catch blocks. Failures should be logged for debugging.
 - **Service Crashes**: The service should be configured to restart automatically if the OS or an unhandled exception terminates it.
 
+> create an error logging service that can be shared by user in a future feature update
+
 ### User Experience
 
 - Persistent notification showing session status
@@ -151,6 +155,8 @@ class MockLocationService extends LocationService {
 - **Stop Session**: End current session and stop background service
 - **View Status**: Display current session metrics (time, locations recorded)
 - **Quick Settings**: Access key service settings from notification
+
+> there is too much here let's just have start stop pause resume and number of events in current session. it should also link back to the app
 
 ### iOS Background Limitations & Fallback Strategy
 
@@ -187,6 +193,8 @@ class MockLocationService extends LocationService {
 - Battery usage optimization
 - Service lifecycle testing
 - Performance benchmarking
+
+> insert a testing phase
 
 ### Phase 5: Documentation & Export Compatibility
 
