@@ -1,6 +1,6 @@
-# **AIRSOFT** Telemetry Mobile App
+# **Airsoft** Telemetry Mobile App
 
-A comprehensive **Flutter mobile application** for Android and iOS devices designed for telemetry data collection during **airsoft** gaming sessions. Track player movements, record game events, and export detailed analytics with high-precision GPS coordinates and sensor data. **Currently in active development** with core telemetry features production-ready and advanced insights features in development.
+A comprehensive **Flutter mobile application** for Android and iOS devices designed for telemetry data collection during **Airsoft** gaming sessions. Track player movements, record game events, and export detailed analytics with high-precision GPS coordinates and sensor data. **Currently in active development** with core telemetry features production-ready and advanced insights features in development.
 
 ![Flutter](https://img.shields.io/badge/Flutter-3.4.3+-blue.svg)
 ![Dart](https://img.shields.io/badge/Dart-3.0+-blue.svg)
@@ -11,19 +11,19 @@ A comprehensive **Flutter mobile application** for Android and iOS devices desig
 
 ## 🚀 **How It Works**
 
-Ever wonder how far you walked during that intense **AIRSOFT** battle? This app transforms your mobile device into a comprehensive telemetry system that tracks every aspect of your gameplay:
+Ever wonder how far you walked during that intense **Airsoft** battle? This app transforms your mobile device into a comprehensive telemetry system that tracks every aspect of your gameplay:
 
 1. **📍 Start Tracking**: Press start and the app begins collecting your GPS location at configurable intervals (every 1-60 seconds)
 2. **🎯 Record Events**: Tap HIT, SPAWN, or KILL buttons to log combat events with precise coordinates  
 3. **📊 Analyze Performance**: View real-time data and export detailed analytics to discover patterns in your gameplay
 4. **🤖 AI Insights**: *(Coming Soon)* Machine learning analysis to identify movement patterns, tactical tendencies, and performance improvements
-5. **📈 Improve Gameplay**: Use data-driven insights to enhance your **AIRSOFT** strategy and performance
+5. **📈 Improve Gameplay**: Use data-driven insights to enhance your **Airsoft** strategy and performance
 
 **No backend required** - everything runs entirely on your device, with optional AI analysis through your personal Gemini API, making the app easy to run and maintain without external dependencies.
 
 ## 🤝 **Looking for Contributors!**
 
-**We're actively seeking contributors to help make this the ultimate AIRSOFT telemetry app!** Whether you're an **airsofter** who codes, a Flutter developer, a field tester, or a data enthusiast - we'd love your help.
+**We're actively seeking contributors to help make this the ultimate Airsoft telemetry app!** Whether you're an **Airsofter** who codes, a Flutter developer, a field tester, or a data enthusiast - we'd love your help.
 
 **Ready to contribute?** Jump to our [Contributing & Development](#🤝-contributing--development) section to get started!
 
@@ -49,7 +49,7 @@ This project showcases an innovative approach to software development through **
 
 ### **Human Oversight Areas**
 
-- **Feature Prioritization**: Deciding what **AIRSOFT** players actually need
+- **Feature Prioritization**: Deciding what **Airsoft** players actually need
 - **User Experience**: Ensuring the app works well in field conditions  
 - **Technical Architecture**: Making strategic decisions about app structure and dependencies
 - **Community Management**: Engaging with contributors and managing feedback
@@ -114,32 +114,32 @@ This project showcases an innovative approach to software development through **
 
 ### **Service Layer Architecture**
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     Presentation Layer                      │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-│  │ HomeScreen  │  │ SettingsUI  │  │ InsightsScreen      │ │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                      Service Layer                          │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-│  │ Telemetry   │  │ Location    │  │ Database            │ │
-│  │ Service     │◄─│ Service     │◄─│ Service             │ │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘ │
-│         │                                  │                │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-│  │ Preferences │  │ Export      │  │ App Config          │ │
-│  │ Service     │  │ Service     │  │                     │ │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                       Data Layer                            │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-│  │ SQLite DB   │  │ SharedPrefs │  │ File System         │ │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────┐
+│                       Presentation Layer                      │
+│   ┌───────────────┐   ┌───────────────┐   ┌─────────────────┐ │
+│   │   HomeScreen  │   │   SettingsUI  │   │  InsightsScreen │ │
+│   └───────────────┘   └───────────────┘   └─────────────────┘ │
+└───────────────────────────────────────────────────────────────┘
+                               │
+┌───────────────────────────────────────────────────────────────┐
+│                        Service Layer                          │
+│   ┌───────────────┐   ┌───────────────┐   ┌─────────────────┐ │
+│   │   Telemetry   │   │   Location    │   │    Database     │ │
+│   │   Service     │◄──│   Service     │◄──│    Service      │ │
+│   └───────────────┘   └───────────────┘   └─────────────────┘ │
+│           │                                   │               │
+│   ┌───────────────┐   ┌───────────────┐   ┌─────────────────┐ │
+│   │  Preferences  │   │    Export     │   │   App Config    │ │
+│   │   Service     │   │    Service    │   │                 │ │
+│   └───────────────┘   └───────────────┘   └─────────────────┘ │
+└───────────────────────────────────────────────────────────────┘
+                               │
+┌───────────────────────────────────────────────────────────────┐
+│                         Data Layer                            │
+│   ┌───────────────┐   ┌───────────────┐   ┌─────────────────┐ │
+│   │   SQLite DB   │   │  SharedPrefs  │   │   File System   │ │
+│   └───────────────┘   └───────────────┘   └─────────────────┘ │
+└───────────────────────────────────────────────────────────────┘
 ```
 
 ### **Key Components**
@@ -156,15 +156,15 @@ This project showcases an innovative approach to software development through **
 ## 🤝 **Contributing & Development**
 
 ### **Contributors Welcome!**
-We actively welcome contributions from developers and **AIRSOFT** enthusiasts! Whether you're:
+We actively welcome contributions from developers and **Airsoft** enthusiasts! Whether you're:
 - **Airsofters who code**: Help us build features you'd actually use in the field
 - **Developers interested in Flutter**: Learn modern app development patterns
-- **Field testers**: Test the app during real **AIRSOFT** games and provide feedback
+- **Field testers**: Test the app during real **Airsoft** games and provide feedback
 - **Data enthusiasts**: Help analyze telemetry data and suggest new insights
 
 ### **How to Contribute**
 1. **Check the Issues tab** for available tasks and feature requests
-2. **Fork the repository** and create a feature, bug, or refactor branch
+2. **Fork the repository** and create a feature, bug, or refactor branch.
 3. **Test thoroughly** - we maintain high code quality standards requireing unit tests and integration tests
 4. **Submit a pull request** with detailed description of changes
 
@@ -177,8 +177,8 @@ Check the **Issues tab** for current tasks including:
 - Performance optimization and battery life enhancements
 
 ### **Field Testing Needed**
-We especially need **AIRSOFT** players who can:
-- Test GPS accuracy during actual games
+We especially need **Airsoft** players who can:
+- Test GPS accuracy during actual games.
 - Provide feedback on battery usage during long sessions  
 - Suggest new features based on real gameplay needs
 - Report bugs and edge cases found in field conditions
