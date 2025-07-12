@@ -1,3 +1,4 @@
+import 'package:airsoft_telemetry_flutter/utils/location_formatter.dart';
 import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
@@ -83,8 +84,8 @@ class ExportService {
         event.eventType,
         event.timestamp.toString(),
         formattedDateTime,
-        event.latitude.toStringAsFixed(8),
-        event.longitude.toStringAsFixed(8),
+        LocationFormatter.formatLatitude(event.latitude),
+        LocationFormatter.formatLongitude(event.longitude),
         event.altitude.toStringAsFixed(2),
         event.azimuth?.toStringAsFixed(2) ?? '',
         event.speed?.toStringAsFixed(2) ?? '',

@@ -35,6 +35,9 @@ dependencies:
   # For path operations in database service
   path: ^1.8.3
 
+  # For converting between different coordinate formats
+  coordinate_converter: ^1.0.2
+
   plugin_platform_interface: ^2.1.8
 
 dev_dependencies:

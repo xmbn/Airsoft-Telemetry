@@ -1,3 +1,4 @@
+import 'package:airsoft_telemetry_flutter/utils/location_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:airsoft_telemetry_flutter/services/app_config.dart';
@@ -248,11 +249,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: AppConfig.smallPadding),
                     Text(
-                      'Lat: ${_currentPosition!.latitude.toStringAsFixed(6)}',
+                      'Lat: ${LocationFormatter.formatLatitude(_currentPosition!.latitude)}',
                       style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
                     ),
                     Text(
-                      'Lng: ${_currentPosition!.longitude.toStringAsFixed(6)}',
+                      'Lng: ${LocationFormatter.formatLongitude(_currentPosition!.longitude)}',
                       style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
                     ),
                     Text(

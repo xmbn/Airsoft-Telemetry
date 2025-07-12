@@ -35,19 +35,27 @@ class LocationService {
     if (!hasPermission) {
       return null;
     }
-    return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
+    try {
+      return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        timeLimit: const Duration(seconds: 10),
+      );
+    } on TimeoutException {
+      // Handle timeout
+      return null;
+    } catch (e) {
+      // Handle other errors
+      return null;
+    }
   }
 
-  Stream<Position> getPositionStream({int distanceFilter = 5, int intervalSeconds = 2}) async* {
+  Stream<Position> getPositionStream({int distanceFilter = 5}) async* {
     final hasPermission = await _handleLocationPermission();
     if (hasPermission) {
       yield* Geolocator.getPositionStream(
         locationSettings: LocationSettings(
           accuracy: LocationAccuracy.high,
           distanceFilter: distanceFilter,
-          timeLimit: Duration(seconds: intervalSeconds),
         ),
       );
     }
