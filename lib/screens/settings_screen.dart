@@ -365,90 +365,156 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   border: Border.all(color: AppConfig.outlineColor),
                   borderRadius:
                       BorderRadius.circular(AppConfig.inputBorderRadius)),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(AppConfig.latitudeLabel,
-                          style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text(
-                          _currentPosition != null
-                              ? LocationFormatter.formatLatitude(
-                                  _currentPosition!.latitude)
-                              : 'N/A',
-                          style: const TextStyle(
-                              color: AppConfig.primaryTextColor)),
-                    ],
-                  ),
-                  const SizedBox(height: AppConfig.smallPadding),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(AppConfig.longitudeLabel,
-                          style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text(
-                          _currentPosition != null
-                              ? LocationFormatter.formatLongitude(
-                                  _currentPosition!.longitude)
-                              : 'N/A',
-                          style: const TextStyle(
-                              color: AppConfig.primaryTextColor)),
-                    ],
-                  ),
-                  const SizedBox(height: AppConfig.smallPadding),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(AppConfig.azimuthLabel,
-                          style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text(
-                          MeasureFormatter.formatAzimuth(
-                              _currentPosition?.heading),
-                          style: const TextStyle(
-                              color: AppConfig.primaryTextColor)),
-                    ],
-                  ),
-                  const SizedBox(height: AppConfig.smallPadding),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(AppConfig.speedLabel,
-                          style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text(
-                          MeasureFormatter.formatSpeed(_currentPosition?.speed),
-                          style: const TextStyle(
-                              color: AppConfig.primaryTextColor)),
-                    ],
-                  ),
-                  const SizedBox(height: AppConfig.smallPadding),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(AppConfig.accuracyLabel,
-                          style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text(
-                          MeasureFormatter.formatAccuracy(
-                              _currentPosition?.accuracy),
-                          style: const TextStyle(
-                              color: AppConfig.primaryTextColor)),
-                    ],
-                  ),
-                  const SizedBox(height: AppConfig.smallPadding),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Altitude',
-                          style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text(
-                          MeasureFormatter.formatAltitude(
-                              _currentPosition?.altitude),
-                          style: const TextStyle(
-                              color: AppConfig.primaryTextColor)),
-                    ],
-                  ),
-                ],
-              ),
+              alignment: Alignment.center,
+              child: Center(
+                child: Table(
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  columnWidths: const {
+                    0: IntrinsicColumnWidth(),
+                    1: IntrinsicColumnWidth(),
+                  },
+                  children: [
+                    // Latitude
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${AppConfig.latitudeLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ' + (_currentPosition != null
+                              ? LocationFormatter.formatLatitude(_currentPosition!.latitude)
+                              : 'N/A'),
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                    TableRow(children: [
+                      SizedBox(height: AppConfig.smallPadding),
+                      SizedBox(height: AppConfig.smallPadding),
+                    ]),
+                    // Longitude
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${AppConfig.longitudeLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ' + (_currentPosition != null
+                              ? LocationFormatter.formatLongitude(_currentPosition!.longitude)
+                              : 'N/A'),
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                    TableRow(children: [
+                      SizedBox(height: AppConfig.smallPadding),
+                      SizedBox(height: AppConfig.smallPadding),
+                    ]),
+                    // Altitude
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: const Text(
+                          'Altitude:',
+                          style: TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ' + MeasureFormatter.formatAltitude(_currentPosition?.altitude),
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                    TableRow(children: [
+                      SizedBox(height: AppConfig.smallPadding),
+                      SizedBox(height: AppConfig.smallPadding),
+                    ]),
+                    // Azimuth
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${AppConfig.azimuthLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ' + MeasureFormatter.formatAzimuth(_currentPosition?.heading),
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                    TableRow(children: [
+                      SizedBox(height: AppConfig.smallPadding),
+                      SizedBox(height: AppConfig.smallPadding),
+                    ]),
+                    // Speed
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${AppConfig.speedLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ' + MeasureFormatter.formatSpeed(_currentPosition?.speed),
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                    TableRow(children: [
+                      SizedBox(height: AppConfig.smallPadding),
+                      SizedBox(height: AppConfig.smallPadding),
+                    ]),
+                    // Accuracy
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${AppConfig.accuracyLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ' + MeasureFormatter.formatAccuracy(_currentPosition?.accuracy),
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                  ],
+                ),
+            ),
             ),
             const SizedBox(height: AppConfig.extraLargePadding),
 
