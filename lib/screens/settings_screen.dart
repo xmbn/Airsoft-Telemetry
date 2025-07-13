@@ -1,4 +1,5 @@
 import 'package:airsoft_telemetry_flutter/utils/location_formatter.dart';
+import 'package:airsoft_telemetry_flutter/utils/measure_formatter.dart';
 import 'dart:async';
 
 import 'package:airsoft_telemetry_flutter/services/location_service.dart';
@@ -212,7 +213,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final timeString = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}';
     
     return '${event.eventType} -- Lat: ${LocationFormatter.formatLatitude(event.latitude)}, Lng: ${LocationFormatter.formatLongitude(event.longitude)}, '
-           'Alt: ${event.altitude.toStringAsFixed(1)}m @ $timeString';
+           'Alt: ${MeasureFormatter.formatAltitude(event.altitude)} @ $timeString';
   }
   @override
   void dispose() {
@@ -348,7 +349,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(AppConfig.azimuthLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text('${_currentPosition?.heading ?? 'N/A'}', style: const TextStyle(color: AppConfig.primaryTextColor)),
+                      Text(MeasureFormatter.formatAzimuth(_currentPosition?.heading), style: const TextStyle(color: AppConfig.primaryTextColor)),
                     ],
                   ),
                   const SizedBox(height: AppConfig.smallPadding),
@@ -356,7 +357,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(AppConfig.speedLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text('${_currentPosition?.speed ?? 'N/A'}', style: const TextStyle(color: AppConfig.primaryTextColor)),
+                      Text(MeasureFormatter.formatSpeed(_currentPosition?.speed), style: const TextStyle(color: AppConfig.primaryTextColor)),
                     ],
                   ),
                   const SizedBox(height: AppConfig.smallPadding),
@@ -364,7 +365,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(AppConfig.accuracyLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text('${_currentPosition?.accuracy ?? 'N/A'}', style: const TextStyle(color: AppConfig.primaryTextColor)),
+                      Text(MeasureFormatter.formatAccuracy(_currentPosition?.accuracy), style: const TextStyle(color: AppConfig.primaryTextColor)),
                     ],
                   ),
                 ],

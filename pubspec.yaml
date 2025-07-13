@@ -40,6 +40,9 @@ dependencies:
 
   plugin_platform_interface: ^2.1.8
 
+  # For locale-aware number formatting
+  intl: ^0.19.0
+
 dev_dependencies:
   # Documentation:
   # The 'flutter_test' dependency utilizes the Flutter SDK to provide a framework for writing and running 

@@ -1,4 +1,5 @@
 import 'package:airsoft_telemetry_flutter/utils/location_formatter.dart';
+import 'package:airsoft_telemetry_flutter/utils/measure_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:airsoft_telemetry_flutter/services/app_config.dart';
@@ -257,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
                     ),
                     Text(
-                      'Alt: ${_currentPosition!.altitude.toStringAsFixed(1)}m',
+                      'Alt: ${MeasureFormatter.formatAltitude(_currentPosition!.altitude)}',
                       style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
                     ),
                   ],
