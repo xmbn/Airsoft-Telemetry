@@ -9,13 +9,13 @@ class MockDatabaseService extends Mock implements DatabaseService {}
 // Create a testable version of ExportService that accepts a DatabaseService dependency
 class TestableExportService {
   final DatabaseService _databaseService;
-  
+
   TestableExportService(this._databaseService);
 
   Future<Map<String, dynamic>> getExportStats() async {
     final eventCount = await _databaseService.getEventCount();
     final events = await _databaseService.getAllEvents();
-    
+
     if (events.isEmpty) {
       return {
         'eventCount': 0,
@@ -26,19 +26,20 @@ class TestableExportService {
 
     // Count unique sessions
     final uniqueSessions = events.map((e) => e.gameSessionId).toSet();
-    
+
     // Get date range
     final timestamps = events.map((e) => e.timestamp).toList();
     timestamps.sort();
     final earliestDate = DateTime.fromMillisecondsSinceEpoch(timestamps.first);
     final latestDate = DateTime.fromMillisecondsSinceEpoch(timestamps.last);
-    
+
     final earliestFormatted = _formatDate(earliestDate);
     final latestFormatted = _formatDate(latestDate);
-    
-    final dateRange = timestamps.length > 1 && earliestFormatted != latestFormatted
-        ? '$earliestFormatted - $latestFormatted'
-        : earliestFormatted;
+
+    final dateRange =
+        timestamps.length > 1 && earliestFormatted != latestFormatted
+            ? '$earliestFormatted - $latestFormatted'
+            : earliestFormatted;
 
     return {
       'eventCount': eventCount,
@@ -70,11 +71,11 @@ class TestableExportService {
 
     // Convert events to rows
     final rows = <List<String>>[headers];
-    
+
     for (final event in events) {
       final dateTime = DateTime.fromMillisecondsSinceEpoch(event.timestamp);
       final formattedDateTime = dateTime.toIso8601String();
-      
+
       rows.add([
         event.id?.toString() ?? '',
         event.gameSessionId,
@@ -107,7 +108,8 @@ void main() {
     });
 
     group('CSV Conversion', () {
-      test('convertEventsToCsv creates correct CSV format with sample data', () {
+      test('convertEventsToCsv creates correct CSV format with sample data',
+          () {
         final events = [
           GameEvent(
             id: 1,
@@ -138,11 +140,11 @@ void main() {
         ];
 
         final csvResult = exportService.convertEventsToCsv(events);
-        
+
         // Verify CSV structure
         final lines = csvResult.split('\n');
         expect(lines.length, equals(3)); // Header + 2 data rows
-        
+
         // Verify headers
         final headers = lines[0].split(',');
         expect(headers.length, equals(12));
@@ -150,7 +152,7 @@ void main() {
         expect(headers[1], equals('Session ID'));
         expect(headers[2], equals('Player ID'));
         expect(headers[3], equals('Event Type'));
-        
+
         // Verify first data row
         final firstRow = lines[1].split(',');
         expect(firstRow[0], equals('1')); // ID
@@ -158,8 +160,10 @@ void main() {
         expect(firstRow[2], equals('player1')); // Player ID
         expect(firstRow[3], equals('START')); // Event Type
         expect(firstRow[4], equals('1641024000000')); // Timestamp
-        expect(firstRow[6], equals('40.71280000')); // Latitude with 8 decimal places
-        expect(firstRow[7], equals('-74.00600000')); // Longitude with 8 decimal places
+        expect(firstRow[6],
+            equals('40.71280000')); // Latitude with 8 decimal places
+        expect(firstRow[7],
+            equals('-74.00600000')); // Longitude with 8 decimal places
         expect(firstRow[8], equals('10.50')); // Altitude with 2 decimal places
         expect(firstRow[9], equals('45.00')); // Azimuth with 2 decimal places
         expect(firstRow[10], equals('0.00')); // Speed with 2 decimal places
@@ -184,7 +188,7 @@ void main() {
         final csvResult = exportService.convertEventsToCsv(events);
         final lines = csvResult.split('\n');
         final dataRow = lines[1].split(',');
-        
+
         // Verify null fields are handled as empty strings
         expect(dataRow[9], equals('')); // Azimuth
         expect(dataRow[10], equals('')); // Speed
@@ -195,8 +199,10 @@ void main() {
     group('Export Statistics', () {
       test('getExportStats returns correct stats for empty database', () async {
         // Mock empty database
-        when(() => mockDatabaseService.getEventCount()).thenAnswer((_) async => 0);
-        when(() => mockDatabaseService.getAllEvents()).thenAnswer((_) async => []);
+        when(() => mockDatabaseService.getEventCount())
+            .thenAnswer((_) async => 0);
+        when(() => mockDatabaseService.getAllEvents())
+            .thenAnswer((_) async => []);
 
         final stats = await exportService.getExportStats();
 
@@ -205,14 +211,16 @@ void main() {
         expect(stats['dateRange'], equals(''));
       });
 
-      test('getExportStats calculates correct stats for single session', () async {
+      test('getExportStats calculates correct stats for single session',
+          () async {
         final events = [
           GameEvent(
             id: 1,
             gameSessionId: 'session123',
             playerId: 'player1',
             eventType: 'START',
-            timestamp: 1641024000000, // 2022-01-01 08:00:00 UTC (adjusted for timezone)
+            timestamp:
+                1641024000000, // 2022-01-01 08:00:00 UTC (adjusted for timezone)
             latitude: 40.7128,
             longitude: -74.0060,
             altitude: 10.5,
@@ -229,8 +237,10 @@ void main() {
           ),
         ];
 
-        when(() => mockDatabaseService.getEventCount()).thenAnswer((_) async => 2);
-        when(() => mockDatabaseService.getAllEvents()).thenAnswer((_) async => events);
+        when(() => mockDatabaseService.getEventCount())
+            .thenAnswer((_) async => 2);
+        when(() => mockDatabaseService.getAllEvents())
+            .thenAnswer((_) async => events);
 
         final stats = await exportService.getExportStats();
 
@@ -239,7 +249,8 @@ void main() {
         expect(stats['dateRange'], equals('1/1/2022'));
       });
 
-      test('getExportStats calculates correct stats for multiple sessions', () async {
+      test('getExportStats calculates correct stats for multiple sessions',
+          () async {
         final events = [
           GameEvent(
             id: 1,
@@ -273,8 +284,10 @@ void main() {
           ),
         ];
 
-        when(() => mockDatabaseService.getEventCount()).thenAnswer((_) async => 3);
-        when(() => mockDatabaseService.getAllEvents()).thenAnswer((_) async => events);
+        when(() => mockDatabaseService.getEventCount())
+            .thenAnswer((_) async => 3);
+        when(() => mockDatabaseService.getAllEvents())
+            .thenAnswer((_) async => events);
 
         final stats = await exportService.getExportStats();
 
@@ -310,14 +323,17 @@ void main() {
           ),
         ];
 
-        when(() => mockDatabaseService.getEventCount()).thenAnswer((_) async => 2);
-        when(() => mockDatabaseService.getAllEvents()).thenAnswer((_) async => events);
+        when(() => mockDatabaseService.getEventCount())
+            .thenAnswer((_) async => 2);
+        when(() => mockDatabaseService.getAllEvents())
+            .thenAnswer((_) async => events);
 
         final stats = await exportService.getExportStats();
 
         expect(stats['eventCount'], equals(2));
         expect(stats['sessionCount'], equals(1));
-        expect(stats['dateRange'], equals('1/1/2022')); // Single date for same timestamps
+        expect(stats['dateRange'],
+            equals('1/1/2022')); // Single date for same timestamps
       });
 
       test('getExportStats handles events with null optional fields', () async {
@@ -335,8 +351,10 @@ void main() {
           ),
         ];
 
-        when(() => mockDatabaseService.getEventCount()).thenAnswer((_) async => 1);
-        when(() => mockDatabaseService.getAllEvents()).thenAnswer((_) async => events);
+        when(() => mockDatabaseService.getEventCount())
+            .thenAnswer((_) async => 1);
+        when(() => mockDatabaseService.getAllEvents())
+            .thenAnswer((_) async => events);
 
         final stats = await exportService.getExportStats();
 

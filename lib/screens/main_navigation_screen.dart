@@ -12,7 +12,8 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  final PageController _pageController = PageController(initialPage: 1); // Start on home screen
+  final PageController _pageController =
+      PageController(initialPage: 1); // Start on home screen
 
   final List<Widget> _screens = [
     const SettingsScreen(),

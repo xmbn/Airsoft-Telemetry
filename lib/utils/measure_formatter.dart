@@ -32,9 +32,7 @@ class MeasureFormatter {
   }
 
   static String _azimuthToCompass(double azimuth) {
-    const directions = [
-      'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'
-    ];
+    const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'];
     final idx = ((azimuth % 360) / 45).round();
     return directions[idx];
   }

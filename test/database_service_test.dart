@@ -8,9 +8,9 @@ class MockDatabase extends Mock implements Database {}
 // Create a testable version of DatabaseService that can be injected with a mock database
 class TestableDatabaseService {
   final Database _database;
-  
+
   TestableDatabaseService(this._database);
-  
+
   Future<Database> get database async => _database;
 
   // Copy all the methods from DatabaseService for testing
@@ -118,7 +118,8 @@ class TestableDatabaseService {
 
   Future<int> getEventCount() async {
     final db = await database;
-    final List<Map<String, dynamic>> result = await db.rawQuery('SELECT COUNT(*) FROM game_events');
+    final List<Map<String, dynamic>> result =
+        await db.rawQuery('SELECT COUNT(*) FROM game_events');
     return Sqflite.firstIntValue(result) ?? 0;
   }
 
@@ -169,20 +170,20 @@ void main() {
       // Assert
       expect(result, equals(expectedId));
       verify(() => mockDatabase.insert(
-        'game_events',
-        {
-          'gameSessionId': 'test_session',
-          'playerId': 'test_player',
-          'eventType': 'HIT',
-          'timestamp': timestamp,
-          'latitude': 40.7128,
-          'longitude': -74.0060,
-          'altitude': 10.0,
-          'azimuth': 45.0,
-          'speed': 2.5,
-          'accuracy': 3.0,
-        },
-      )).called(1);
+            'game_events',
+            {
+              'gameSessionId': 'test_session',
+              'playerId': 'test_player',
+              'eventType': 'HIT',
+              'timestamp': timestamp,
+              'latitude': 40.7128,
+              'longitude': -74.0060,
+              'altitude': 10.0,
+              'azimuth': 45.0,
+              'speed': 2.5,
+              'accuracy': 3.0,
+            },
+          )).called(1);
     });
 
     test('insertEvent handles null optional fields correctly', () async {
@@ -211,20 +212,20 @@ void main() {
       // Assert
       expect(result, equals(expectedId));
       verify(() => mockDatabase.insert(
-        'game_events',
-        {
-          'gameSessionId': 'test_session',
-          'playerId': 'test_player',
-          'eventType': 'HIT',
-          'timestamp': timestamp,
-          'latitude': 40.7128,
-          'longitude': -74.0060,
-          'altitude': 10.0,
-          'azimuth': null,
-          'speed': null,
-          'accuracy': null,
-        },
-      )).called(1);
+            'game_events',
+            {
+              'gameSessionId': 'test_session',
+              'playerId': 'test_player',
+              'eventType': 'HIT',
+              'timestamp': timestamp,
+              'latitude': 40.7128,
+              'longitude': -74.0060,
+              'altitude': 10.0,
+              'azimuth': null,
+              'speed': null,
+              'accuracy': null,
+            },
+          )).called(1);
     });
 
     test('getAllEvents calls database query with correct parameters', () async {
@@ -260,9 +261,9 @@ void main() {
       ];
 
       when(() => mockDatabase.query(
-        any(),
-        orderBy: any(named: 'orderBy'),
-      )).thenAnswer((_) async => mockData);
+            any(),
+            orderBy: any(named: 'orderBy'),
+          )).thenAnswer((_) async => mockData);
 
       // Act
       final result = await databaseService.getAllEvents();
@@ -278,12 +279,13 @@ void main() {
       expect(result[1].azimuth, isNull);
 
       verify(() => mockDatabase.query(
-        'game_events',
-        orderBy: 'timestamp DESC',
-      )).called(1);
+            'game_events',
+            orderBy: 'timestamp DESC',
+          )).called(1);
     });
 
-    test('getEventsBySession calls database query with session filter', () async {
+    test('getEventsBySession calls database query with session filter',
+        () async {
       // Arrange
       const sessionId = 'test_session_123';
       final mockData = [
@@ -303,11 +305,11 @@ void main() {
       ];
 
       when(() => mockDatabase.query(
-        any(),
-        where: any(named: 'where'),
-        whereArgs: any(named: 'whereArgs'),
-        orderBy: any(named: 'orderBy'),
-      )).thenAnswer((_) async => mockData);
+            any(),
+            where: any(named: 'where'),
+            whereArgs: any(named: 'whereArgs'),
+            orderBy: any(named: 'orderBy'),
+          )).thenAnswer((_) async => mockData);
 
       // Act
       final result = await databaseService.getEventsBySession(sessionId);
@@ -317,11 +319,11 @@ void main() {
       expect(result[0].gameSessionId, equals(sessionId));
 
       verify(() => mockDatabase.query(
-        'game_events',
-        where: 'gameSessionId = ?',
-        whereArgs: [sessionId],
-        orderBy: 'timestamp DESC',
-      )).called(1);
+            'game_events',
+            where: 'gameSessionId = ?',
+            whereArgs: [sessionId],
+            orderBy: 'timestamp DESC',
+          )).called(1);
     });
 
     test('getRecentEvents calls database query with limit', () async {
@@ -345,10 +347,10 @@ void main() {
       );
 
       when(() => mockDatabase.query(
-        any(),
-        orderBy: any(named: 'orderBy'),
-        limit: any(named: 'limit'),
-      )).thenAnswer((_) async => mockData);
+            any(),
+            orderBy: any(named: 'orderBy'),
+            limit: any(named: 'limit'),
+          )).thenAnswer((_) async => mockData);
 
       // Act
       final result = await databaseService.getRecentEvents(limit: limit);
@@ -357,29 +359,29 @@ void main() {
       expect(result.length, equals(limit));
 
       verify(() => mockDatabase.query(
-        'game_events',
-        orderBy: 'timestamp DESC',
-        limit: limit,
-      )).called(1);
+            'game_events',
+            orderBy: 'timestamp DESC',
+            limit: limit,
+          )).called(1);
     });
 
     test('getRecentEvents uses default limit when not specified', () async {
       // Arrange
       when(() => mockDatabase.query(
-        any(),
-        orderBy: any(named: 'orderBy'),
-        limit: any(named: 'limit'),
-      )).thenAnswer((_) async => []);
+            any(),
+            orderBy: any(named: 'orderBy'),
+            limit: any(named: 'limit'),
+          )).thenAnswer((_) async => []);
 
       // Act
       await databaseService.getRecentEvents();
 
       // Assert
       verify(() => mockDatabase.query(
-        'game_events',
-        orderBy: 'timestamp DESC',
-        limit: 50, // Default limit
-      )).called(1);
+            'game_events',
+            orderBy: 'timestamp DESC',
+            limit: 50, // Default limit
+          )).called(1);
     });
 
     test('clearAllEvents calls database delete without conditions', () async {
@@ -396,15 +398,16 @@ void main() {
       verify(() => mockDatabase.delete('game_events')).called(1);
     });
 
-    test('clearEventsBySession calls database delete with session filter', () async {
+    test('clearEventsBySession calls database delete with session filter',
+        () async {
       // Arrange
       const sessionId = 'session_to_delete';
       const deletedCount = 5;
       when(() => mockDatabase.delete(
-        any(),
-        where: any(named: 'where'),
-        whereArgs: any(named: 'whereArgs'),
-      )).thenAnswer((_) async => deletedCount);
+            any(),
+            where: any(named: 'where'),
+            whereArgs: any(named: 'whereArgs'),
+          )).thenAnswer((_) async => deletedCount);
 
       // Act
       final result = await databaseService.clearEventsBySession(sessionId);
@@ -412,17 +415,18 @@ void main() {
       // Assert
       expect(result, equals(deletedCount));
       verify(() => mockDatabase.delete(
-        'game_events',
-        where: 'gameSessionId = ?',
-        whereArgs: [sessionId],
-      )).called(1);
+            'game_events',
+            where: 'gameSessionId = ?',
+            whereArgs: [sessionId],
+          )).called(1);
     });
 
     test('getEventCount calls database rawQuery and returns count', () async {
       // Arrange
       const expectedCount = 42;
-      when(() => mockDatabase.rawQuery(any()))
-          .thenAnswer((_) async => [{'COUNT(*)': expectedCount}]);
+      when(() => mockDatabase.rawQuery(any())).thenAnswer((_) async => [
+            {'COUNT(*)': expectedCount}
+          ]);
 
       // Act
       final result = await databaseService.getEventCount();
@@ -435,8 +439,9 @@ void main() {
 
     test('getEventCount returns 0 when database returns null', () async {
       // Arrange
-      when(() => mockDatabase.rawQuery(any()))
-          .thenAnswer((_) async => [{'COUNT(*)': null}]);
+      when(() => mockDatabase.rawQuery(any())).thenAnswer((_) async => [
+            {'COUNT(*)': null}
+          ]);
 
       // Act
       final result = await databaseService.getEventCount();

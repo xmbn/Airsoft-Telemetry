@@ -7,7 +7,7 @@ import 'dart:io';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  
+
   group('ExportService Integration Tests', () {
     late ExportService exportService;
     late DatabaseService databaseService;
@@ -15,7 +15,7 @@ void main() {
     setUp(() async {
       exportService = ExportService();
       databaseService = DatabaseService();
-      
+
       // Clear any existing data
       await databaseService.clearAllEvents();
     });
@@ -49,7 +49,8 @@ void main() {
             gameSessionId: 'integration_session_1',
             playerId: 'test_player_1',
             eventType: 'HIT',
-            timestamp: DateTime.now().millisecondsSinceEpoch + 60000, // 1 minute later
+            timestamp:
+                DateTime.now().millisecondsSinceEpoch + 60000, // 1 minute later
             latitude: 40.7129,
             longitude: -74.0061,
             altitude: 11.0,
@@ -61,7 +62,8 @@ void main() {
             gameSessionId: 'integration_session_2',
             playerId: 'test_player_2',
             eventType: 'START',
-            timestamp: DateTime.now().millisecondsSinceEpoch + 120000, // 2 minutes later
+            timestamp: DateTime.now().millisecondsSinceEpoch +
+                120000, // 2 minutes later
             latitude: 40.7130,
             longitude: -74.0062,
             altitude: 12.0,
@@ -183,7 +185,10 @@ void main() {
         final lines = csvContent.split('\n');
 
         // Verify structure
-        expect(lines.length, greaterThanOrEqualTo(5)); // Header + 4 data rows + possible empty line
+        expect(
+            lines.length,
+            greaterThanOrEqualTo(
+                5)); // Header + 4 data rows + possible empty line
 
         // Verify headers
         final headers = lines[0].split(',').map((h) => h.trim()).toList();
@@ -205,7 +210,8 @@ void main() {
         final dataRows = <List<String>>[];
         for (int i = 1; i < lines.length; i++) {
           if (lines[i].trim().isNotEmpty) {
-            dataRows.add(lines[i].split(',').map((cell) => cell.trim()).toList());
+            dataRows
+                .add(lines[i].split(',').map((cell) => cell.trim()).toList());
           }
         }
 
@@ -223,9 +229,12 @@ void main() {
 
         // Find the HIT event row for null handling
         final hitEventRow = dataRows.firstWhere((row) => row[3] == 'HIT');
-        expect(hitEventRow[9].trim(), equals('')); // Null azimuth should be empty
-        expect(hitEventRow[10].trim(), equals('')); // Null speed should be empty
-        expect(hitEventRow[11].trim(), equals('')); // Null accuracy should be empty
+        expect(
+            hitEventRow[9].trim(), equals('')); // Null azimuth should be empty
+        expect(
+            hitEventRow[10].trim(), equals('')); // Null speed should be empty
+        expect(hitEventRow[11].trim(),
+            equals('')); // Null accuracy should be empty
 
         // Clean up - delete the generated file
         await csvFile.delete();
@@ -257,15 +266,16 @@ void main() {
 
         // Export multiple times
         final csvFilePath1 = await exportService.exportToCsv();
-        
+
         // Wait a moment to ensure different timestamps
         await Future.delayed(const Duration(milliseconds: 10));
-        
+
         final csvFilePath2 = await exportService.exportToCsv();
 
         expect(csvFilePath1, isNotNull);
         expect(csvFilePath2, isNotNull);
-        expect(csvFilePath1, isNot(equals(csvFilePath2))); // Should have different timestamps
+        expect(csvFilePath1,
+            isNot(equals(csvFilePath2))); // Should have different timestamps
 
         // Verify both files exist
         expect(File(csvFilePath1!).existsSync(), isTrue);
@@ -372,7 +382,8 @@ void main() {
         expect(csvFile.existsSync(), isTrue);
 
         final csvContent = await csvFile.readAsString();
-        final lines = csvContent.split('\n').where((line) => line.isNotEmpty).toList();
+        final lines =
+            csvContent.split('\n').where((line) => line.isNotEmpty).toList();
 
         // Should have header + 5 data rows
         expect(lines.length, equals(6));
@@ -405,7 +416,7 @@ void main() {
       test('export handles database errors gracefully', () async {
         // This test verifies that the export service properly handles
         // database operations and maintains data integrity
-        
+
         // Add some test data
         final testEvent = GameEvent(
           gameSessionId: 'error_test',
@@ -416,7 +427,7 @@ void main() {
           longitude: -74.0060,
           altitude: 10.0,
         );
-        
+
         await databaseService.insertEvent(testEvent);
         await Future.delayed(const Duration(milliseconds: 100));
 
@@ -424,11 +435,11 @@ void main() {
         final stats = await exportService.getExportStats();
         expect(stats, isA<Map<String, dynamic>>());
         expect(stats['eventCount'], greaterThan(0));
-        
+
         // Test export functionality
         final csvPath = await exportService.exportToCsv();
         expect(csvPath, isNotNull);
-        
+
         // Clean up the generated file
         if (csvPath != null) {
           final csvFile = File(csvPath);

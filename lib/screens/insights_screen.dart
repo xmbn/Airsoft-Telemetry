@@ -49,21 +49,23 @@ class _InsightsScreenState extends State<InsightsScreen> {
               ),
             ),
             const SizedBox(height: AppConfig.standardPadding),
-            
+
             // Stats Cards
             Row(
               children: [
                 Expanded(
-                  child: _buildStatCard('Total Events', _totalEvents.toString(), Colors.blue),
+                  child: _buildStatCard(
+                      'Total Events', _totalEvents.toString(), Colors.blue),
                 ),
                 const SizedBox(width: AppConfig.mediumPadding),
                 Expanded(
-                  child: _buildStatCard('Duration', _sessionDuration, Colors.green),
+                  child: _buildStatCard(
+                      'Duration', _sessionDuration, Colors.green),
                 ),
               ],
             ),
             const SizedBox(height: AppConfig.standardPadding),
-            
+
             // Event Breakdown
             const Text(
               'Event Breakdown',
@@ -74,16 +76,16 @@ class _InsightsScreenState extends State<InsightsScreen> {
               ),
             ),
             const SizedBox(height: AppConfig.largePadding),
-            
+
             // Event counts
             _buildEventRow('HIT', _eventCounts['HIT']!, Colors.red),
             const SizedBox(height: AppConfig.mediumPadding),
             _buildEventRow('SPAWN', _eventCounts['SPAWN']!, Colors.green),
             const SizedBox(height: AppConfig.mediumPadding),
             _buildEventRow('KILL', _eventCounts['KILL']!, Colors.amber),
-            
+
             const SizedBox(height: AppConfig.extraLargePadding),
-            
+
             // Recent Activity
             const Text(
               'Recent Activity',
@@ -94,12 +96,13 @@ class _InsightsScreenState extends State<InsightsScreen> {
               ),
             ),
             const SizedBox(height: AppConfig.largePadding),
-            
+
             Container(
               padding: const EdgeInsets.all(AppConfig.standardPadding),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius),
+                borderRadius:
+                    BorderRadius.circular(AppConfig.inputBorderRadius),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,9 +119,9 @@ class _InsightsScreenState extends State<InsightsScreen> {
                 ],
               ),
             ),
-            
+
             const Spacer(),
-            
+
             // Navigation hint
             const Center(
               child: Text(
@@ -169,7 +172,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
       children: [
         Container(
           width: 80,
-          padding: const EdgeInsets.symmetric(vertical: AppConfig.mediumPadding),
+          padding:
+              const EdgeInsets.symmetric(vertical: AppConfig.mediumPadding),
           decoration: BoxDecoration(
             border: Border.all(color: color),
             borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
@@ -203,7 +207,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
         const SizedBox(width: AppConfig.mediumPadding),
         Text(
           count.toString(),
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ],
     );

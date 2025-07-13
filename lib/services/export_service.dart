@@ -16,14 +16,14 @@ class ExportService {
     try {
       // Get all events from database
       final events = await _databaseService.getAllEvents();
-      
+
       if (events.isEmpty) {
         return null; // No data to export
       }
 
       // Convert events to CSV format
       final csvData = _convertEventsToCsv(events);
-      
+
       // Get the downloads directory
       Directory? directory;
       if (Platform.isAndroid) {
@@ -72,11 +72,11 @@ class ExportService {
 
     // Convert events to rows
     final rows = <List<String>>[headers];
-    
+
     for (final event in events) {
       final dateTime = DateTime.fromMillisecondsSinceEpoch(event.timestamp);
       final formattedDateTime = dateTime.toIso8601String();
-      
+
       rows.add([
         event.id?.toString() ?? '',
         event.gameSessionId,
@@ -100,7 +100,7 @@ class ExportService {
   Future<Map<String, dynamic>> getExportStats() async {
     final eventCount = await _databaseService.getEventCount();
     final events = await _databaseService.getAllEvents();
-    
+
     if (events.isEmpty) {
       return {
         'eventCount': 0,
@@ -111,14 +111,14 @@ class ExportService {
 
     // Count unique sessions
     final uniqueSessions = events.map((e) => e.gameSessionId).toSet();
-    
+
     // Get date range
     final timestamps = events.map((e) => e.timestamp).toList();
     timestamps.sort();
     final earliestDate = DateTime.fromMillisecondsSinceEpoch(timestamps.first);
     final latestDate = DateTime.fromMillisecondsSinceEpoch(timestamps.last);
-    
-    final dateRange = timestamps.length > 1 
+
+    final dateRange = timestamps.length > 1
         ? '${_formatDate(earliestDate)} - ${_formatDate(latestDate)}'
         : _formatDate(earliestDate);
 

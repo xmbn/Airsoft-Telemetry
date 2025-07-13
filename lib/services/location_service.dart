@@ -67,7 +67,7 @@ class LocationService {
     if (!hasPermission) return;
 
     _positionController = StreamController<Position>.broadcast();
-    
+
     Timer.periodic(Duration(seconds: intervalSeconds), (timer) async {
       try {
         final position = await getCurrentPosition();
