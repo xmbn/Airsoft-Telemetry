@@ -236,40 +236,45 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildControlButton(),
             const SizedBox(height: AppConfig.extraLargePadding),
 
-            // Current position display
-            if (_currentPosition != null) ...[
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(AppConfig.mediumPadding),
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppConfig.outlineColor),
-                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Current Position',
-                      style: TextStyle(
-                        color: AppConfig.disabledColor,
-                        fontSize: AppConfig.sectionTitleFontSize,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
+            // Current position display (always visible)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(AppConfig.mediumPadding),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppConfig.outlineColor),
+                borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Current Position',
+                    style: TextStyle(
+                      color: AppConfig.disabledColor,
+                      fontSize: AppConfig.sectionTitleFontSize,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: AppConfig.smallPadding),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppConfig.smallPadding),
+                  if (_currentPosition != null)
                     Text(
                       '${LocationFormatter.formatLatitude(_currentPosition!.latitude)}; '
                       '${LocationFormatter.formatLongitude(_currentPosition!.longitude)}; '
                       '${MeasureFormatter.formatAltitude(_currentPosition!.altitude)}',
                       style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
                       textAlign: TextAlign.center,
+                    )
+                  else
+                    Text(
+                      '--; --; --',
+                      style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
+                      textAlign: TextAlign.center,
                     ),
-                  ],
-                ),
+                ],
               ),
-              const SizedBox(height: AppConfig.extraLargePadding),
-            ],
+            ),
+            const SizedBox(height: AppConfig.extraLargePadding),
 
             // Event buttons (fill remaining space)
             Expanded(
