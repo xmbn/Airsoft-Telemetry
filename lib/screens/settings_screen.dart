@@ -368,6 +368,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Text(MeasureFormatter.formatAccuracy(_currentPosition?.accuracy), style: const TextStyle(color: AppConfig.primaryTextColor)),
                     ],
                   ),
+                  const SizedBox(height: AppConfig.smallPadding),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Altitude', style: TextStyle(color: AppConfig.primaryTextColor)),
+                      Text(MeasureFormatter.formatAltitude(_currentPosition?.altitude), style: const TextStyle(color: AppConfig.primaryTextColor)),
+                    ],
+                  ),
                 ],
               ),
             ),
