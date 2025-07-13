@@ -242,7 +242,8 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(AppConfig.mediumPadding),
               decoration: BoxDecoration(
                 border: Border.all(color: AppConfig.outlineColor),
-                borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius),
+                borderRadius:
+                    BorderRadius.circular(AppConfig.inputBorderRadius),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -262,13 +263,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       '${LocationFormatter.formatLatitude(_currentPosition!.latitude)}; '
                       '${LocationFormatter.formatLongitude(_currentPosition!.longitude)}; '
                       '${MeasureFormatter.formatAltitude(_currentPosition!.altitude)}',
-                      style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
+                      style: const TextStyle(
+                          color: AppConfig.primaryTextColor, fontSize: 12),
                       textAlign: TextAlign.center,
                     )
                   else
                     Text(
                       '--; --; --',
-                      style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
+                      style: const TextStyle(
+                          color: AppConfig.primaryTextColor, fontSize: 12),
                       textAlign: TextAlign.center,
                     ),
                 ],

@@ -219,13 +219,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  String _formatEventForDisplay(GameEvent event) {
+  // Returns only lat, long, alt, time (no event type)
+  String _formatEventForDisplayNoType(GameEvent event) {
     final dateTime = DateTime.fromMillisecondsSinceEpoch(event.timestamp);
-    final timeString =
-        '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}';
+    final timeString = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}';
+    return '${LocationFormatter.formatLatitude(event.latitude)},'
+        '${LocationFormatter.formatLongitude(event.longitude)},'
+        '${MeasureFormatter.formatAltitude(event.altitude)} $timeString';
+  }
 
-    return '${event.eventType} -- Lat: ${LocationFormatter.formatLatitude(event.latitude)}, Lng: ${LocationFormatter.formatLongitude(event.longitude)}, '
-        'Alt: ${MeasureFormatter.formatAltitude(event.altitude)} @ $timeString';
+  // Color coding for event types
+  Color _getEventTypeColor(String eventType) {
+    switch (eventType.toLowerCase()) {
+      case 'start':
+        return Colors.green;
+      case 'stop':
+        return Colors.red;
+      case 'hit':
+        return Colors.orange;
+      case 'move':
+        return Colors.blue;
+      default:
+        return AppConfig.primaryTextColor;
+    }
   }
 
   @override
@@ -387,9 +403,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '  ' + (_currentPosition != null
+                          '  ${_currentPosition != null
                               ? LocationFormatter.formatLatitude(_currentPosition!.latitude)
-                              : 'N/A'),
+                              : 'N/A'}',
                           style: const TextStyle(color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
@@ -412,9 +428,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '  ' + (_currentPosition != null
+                          '  ${_currentPosition != null
                               ? LocationFormatter.formatLongitude(_currentPosition!.longitude)
-                              : 'N/A'),
+                              : 'N/A'}',
                           style: const TextStyle(color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
@@ -428,16 +444,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     TableRow(children: [
                       Container(
                         alignment: Alignment.centerRight,
-                        child: const Text(
-                          'Altitude:',
-                          style: TextStyle(color: AppConfig.primaryTextColor),
+                        child: Text(
+                          '${AppConfig.altitudeLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.right,
                         ),
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '  ' + MeasureFormatter.formatAltitude(_currentPosition?.altitude),
+                          '  ${MeasureFormatter.formatAltitude(_currentPosition?.altitude)}',
                           style: const TextStyle(color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
@@ -460,7 +476,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '  ' + MeasureFormatter.formatAzimuth(_currentPosition?.heading),
+                          '  ${MeasureFormatter.formatAzimuth(_currentPosition?.heading)}',
                           style: const TextStyle(color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
@@ -483,7 +499,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '  ' + MeasureFormatter.formatSpeed(_currentPosition?.speed),
+                          '  ${MeasureFormatter.formatSpeed(_currentPosition?.speed)}',
                           style: const TextStyle(color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
@@ -506,7 +522,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '  ' + MeasureFormatter.formatAccuracy(_currentPosition?.accuracy),
+                          '  ${MeasureFormatter.formatAccuracy(_currentPosition?.accuracy)}',
                           style: const TextStyle(color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
@@ -514,7 +530,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ]),
                   ],
                 ),
-            ),
+              ),
             ),
             const SizedBox(height: AppConfig.extraLargePadding),
 
@@ -572,13 +588,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   itemCount: _events.length,
                   itemBuilder: (context, index) {
                     final event = _events[index];
+                    final eventTypeColor = _getEventTypeColor(event.eventType);
+                    final eventTypeText = event.eventType;
+                    final eventDetails = _formatEventForDisplayNoType(event);
                     return Padding(
                       padding:
                           const EdgeInsets.only(bottom: AppConfig.smallPadding),
-                      child: Text(
-                        _formatEventForDisplay(event),
-                        style: const TextStyle(
-                            color: AppConfig.primaryTextColor, fontSize: 12),
+                      child: Row(
+                        children: [
+                          Text(
+                            eventTypeText,
+                            style: TextStyle(
+                                color: eventTypeColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              eventDetails,
+                              style: const TextStyle(
+                                  color: AppConfig.primaryTextColor, fontSize: 12),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },

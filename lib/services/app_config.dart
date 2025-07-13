@@ -59,6 +59,7 @@ class AppConfig {
   static const String locationDataLabel = 'Location Data';
   static const String latitudeLabel = 'Latitude';
   static const String longitudeLabel = 'Longitude';
+  static const String altitudeLabel = 'Altitude';
   static const String azimuthLabel = 'Azimuth';
   static const String speedLabel = 'Speed';
   static const String accuracyLabel = 'Accuracy';
