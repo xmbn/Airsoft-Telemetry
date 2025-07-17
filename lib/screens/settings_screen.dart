@@ -1,3 +1,5 @@
+import 'package:airsoft_telemetry_flutter/utils/location_formatter.dart';
+import 'package:airsoft_telemetry_flutter/utils/measure_formatter.dart';
 import 'dart:async';
 
 import 'package:airsoft_telemetry_flutter/services/location_service.dart';
@@ -22,12 +24,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final PreferencesService _preferencesService = PreferencesService();
   final LocationService _locationService = LocationService();
   final ExportService _exportService = ExportService();
-    String _playerName = AppConfig.defaultPlayerName;
+  String _playerName = AppConfig.defaultPlayerName;
   String _selectedInterval = AppConfig.defaultInterval;
   List<GameEvent> _events = [];
   late final TextEditingController _playerNameController;
   Position? _currentPosition;
-  
+
   StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<Position?>? _telemetryPositionSubscription;
   StreamSubscription<List<GameEvent>>? _eventsSubscription;
@@ -43,12 +45,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _initializeSettings() async {
     // Initialize telemetry service
     await _telemetryService.initialize();
-    
+
     // Load preferences
     final preferences = await _preferencesService.loadAllPreferences();
     _playerName = preferences['playerName'] ?? AppConfig.defaultPlayerName;
     _selectedInterval = preferences['interval'] ?? AppConfig.defaultInterval;
-    
+
     // Update controller text with loaded preferences
     _playerNameController.text = _playerName;
     _playerNameController.addListener(() {
@@ -72,7 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // Listen to position updates
     _listenToLocationStream();
     _listenToTelemetryUpdates();
-    
+
     // Set initial state
     if (mounted) {
       setState(() {});
@@ -80,7 +82,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _listenToLocationStream() {
-    _positionStreamSubscription = _locationService.getPositionStream().listen((Position position) {
+    _positionStreamSubscription =
+        _locationService.getPositionStream().listen((Position position) {
       if (mounted) {
         setState(() {
           _currentPosition = position;
@@ -88,12 +91,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
       }
     });
   }
+
   void _listenToTelemetryUpdates() {
     // Immediately load cached events to avoid empty state
     _events = _telemetryService.cachedRecentEvents;
-    
+
     // Listen to telemetry position updates
-    _telemetryPositionSubscription = _telemetryService.positionStream.listen((position) {
+    _telemetryPositionSubscription =
+        _telemetryService.positionStream.listen((position) {
       if (mounted && position != null) {
         setState(() {
           _currentPosition = position;
@@ -117,12 +122,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _saveInterval() async {
     await _telemetryService.updateInterval(_selectedInterval);
-  }  Future<void> _exportData() async {
+  }
+
+  Future<void> _exportData() async {
     if (!mounted) return;
-    
+
     try {
       final stats = await _exportService.getExportStats();
-      
+
       if (stats['eventCount'] == 0) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -137,7 +144,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         context: context,
         builder: (context) => AlertDialog(
           backgroundColor: AppConfig.surfaceColor,
-          title: const Text('Export Data', style: TextStyle(color: AppConfig.primaryTextColor)),
+          title: const Text('Export Data',
+              style: TextStyle(color: AppConfig.primaryTextColor)),
           content: Text(
             'Export ${stats['eventCount']} events from ${stats['sessionCount']} sessions?\n\nDate range: ${stats['dateRange']}',
             style: const TextStyle(color: AppConfig.primaryTextColor),
@@ -145,11 +153,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel', style: TextStyle(color: AppConfig.primaryTextColor)),
+              child: const Text('Cancel',
+                  style: TextStyle(color: AppConfig.primaryTextColor)),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Export', style: TextStyle(color: Colors.green)),
+              child:
+                  const Text('Export', style: TextStyle(color: Colors.green)),
             ),
           ],
         ),
@@ -171,14 +181,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
       }
     }
   }
+
   Future<void> _clearData() async {
     if (!mounted) return;
-    
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppConfig.surfaceColor,
-        title: const Text('Clear All Data', style: TextStyle(color: AppConfig.primaryTextColor)),
+        title: const Text('Clear All Data',
+            style: TextStyle(color: AppConfig.primaryTextColor)),
         content: const Text(
           'This will permanently delete all recorded events. This action cannot be undone.',
           style: TextStyle(color: AppConfig.primaryTextColor),
@@ -186,7 +198,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel', style: TextStyle(color: AppConfig.primaryTextColor)),
+            child: const Text('Cancel',
+                style: TextStyle(color: AppConfig.primaryTextColor)),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
@@ -206,14 +219,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  String _formatEventForDisplay(GameEvent event) {
+  // Returns only lat, long, alt, time (no event type)
+  String _formatEventForDisplayNoType(GameEvent event) {
     final dateTime = DateTime.fromMillisecondsSinceEpoch(event.timestamp);
     final timeString = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}';
-    
-    return '${event.eventType} -- Lat: ${event.latitude.toStringAsFixed(6)}, '
-           'Lng: ${event.longitude.toStringAsFixed(6)}, '
-           'Alt: ${event.altitude.toStringAsFixed(1)}m @ $timeString';
+    return '${LocationFormatter.formatLatitude(event.latitude)},'
+        '${LocationFormatter.formatLongitude(event.longitude)},'
+        '${MeasureFormatter.formatAltitude(event.altitude)} $timeString';
   }
+
+  // Color coding for event types
+  Color _getEventTypeColor(String eventType) {
+    switch (eventType.toLowerCase()) {
+      case 'start':
+        return Colors.green;
+      case 'stop':
+        return Colors.red;
+      case 'hit':
+        return Colors.orange;
+      case 'move':
+        return Colors.blue;
+      default:
+        return AppConfig.primaryTextColor;
+    }
+  }
+
   @override
   void dispose() {
     _playerNameController.dispose();
@@ -240,13 +270,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Expanded(
                   flex: 2,
                   child: Padding(
-                    padding: const EdgeInsets.only(right: AppConfig.smallPadding),
+                    padding:
+                        const EdgeInsets.only(right: AppConfig.smallPadding),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const Padding(
-                          padding: EdgeInsets.only(left: AppConfig.largePadding),
-                          child: Text(AppConfig.playerNameLabel, style: TextStyle(color: AppConfig.disabledColor)),
+                          padding:
+                              EdgeInsets.only(left: AppConfig.largePadding),
+                          child: Text(AppConfig.playerNameLabel,
+                              style: TextStyle(color: AppConfig.disabledColor)),
                         ),
                         const SizedBox(height: AppConfig.smallPadding),
                         SizedBox(
@@ -255,13 +288,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             controller: _playerNameController,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: AppConfig.outlineColor),
-                                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
+                                  borderSide: const BorderSide(
+                                      color: AppConfig.outlineColor),
+                                  borderRadius: BorderRadius.circular(
+                                      AppConfig.inputBorderRadius)),
                               focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: AppConfig.outlineColor),
-                                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
+                                  borderSide: const BorderSide(
+                                      color: AppConfig.outlineColor),
+                                  borderRadius: BorderRadius.circular(
+                                      AppConfig.inputBorderRadius)),
                             ),
-                            style: const TextStyle(color: AppConfig.primaryTextColor),
+                            style: const TextStyle(
+                                color: AppConfig.primaryTextColor),
                           ),
                         ),
                       ],
@@ -271,13 +309,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Expanded(
                   flex: 1,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: AppConfig.smallPadding),
+                    padding:
+                        const EdgeInsets.only(left: AppConfig.smallPadding),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const Padding(
-                          padding: EdgeInsets.only(left: AppConfig.largePadding),
-                          child: Text(AppConfig.intervalLabel, style: TextStyle(color: AppConfig.disabledColor)),
+                          padding:
+                              EdgeInsets.only(left: AppConfig.largePadding),
+                          child: Text(AppConfig.intervalLabel,
+                              style: TextStyle(color: AppConfig.disabledColor)),
                         ),
                         const SizedBox(height: AppConfig.smallPadding),
                         SizedBox(
@@ -288,16 +329,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             value: _selectedInterval,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: AppConfig.outlineColor),
-                                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
+                                  borderSide: const BorderSide(
+                                      color: AppConfig.outlineColor),
+                                  borderRadius: BorderRadius.circular(
+                                      AppConfig.inputBorderRadius)),
                               focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: AppConfig.outlineColor),
-                                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: AppConfig.largePadding, vertical: AppConfig.smallPadding),
-                            ),                            items: AppConfig.intervalOptions
+                                  borderSide: const BorderSide(
+                                      color: AppConfig.outlineColor),
+                                  borderRadius: BorderRadius.circular(
+                                      AppConfig.inputBorderRadius)),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: AppConfig.largePadding,
+                                  vertical: AppConfig.smallPadding),
+                            ),
+                            items: AppConfig.intervalOptions
                                 .map((e) => DropdownMenuItem(
                                     value: e,
-                                    child: Text(e, style: const TextStyle(color: AppConfig.primaryTextColor))))
+                                    child: Text(e,
+                                        style: const TextStyle(
+                                            color:
+                                                AppConfig.primaryTextColor))))
                                 .toList(),
                             onChanged: (value) => setState(() {
                               if (value != null) {
@@ -314,75 +365,189 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
             const SizedBox(height: AppConfig.extraLargePadding),
-            
+
             // Location Data
             const Text(
               AppConfig.locationDataLabel,
-              style: TextStyle(color: AppConfig.disabledColor, fontSize: AppConfig.sectionTitleFontSize, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: AppConfig.disabledColor,
+                  fontSize: AppConfig.sectionTitleFontSize,
+                  fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: AppConfig.mediumPadding),
             Container(
               padding: const EdgeInsets.all(AppConfig.mediumPadding),
               decoration: BoxDecoration(
                   border: Border.all(color: AppConfig.outlineColor),
-                  borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(AppConfig.latitudeLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text('${_currentPosition?.latitude ?? 'N/A'}', style: const TextStyle(color: AppConfig.primaryTextColor)),
-                    ],
-                  ),
-                  const SizedBox(height: AppConfig.smallPadding),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(AppConfig.longitudeLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text('${_currentPosition?.longitude ?? 'N/A'}', style: const TextStyle(color: AppConfig.primaryTextColor)),
-                    ],
-                  ),
-                  const SizedBox(height: AppConfig.smallPadding),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(AppConfig.azimuthLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text('${_currentPosition?.heading ?? 'N/A'}', style: const TextStyle(color: AppConfig.primaryTextColor)),
-                    ],
-                  ),
-                  const SizedBox(height: AppConfig.smallPadding),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(AppConfig.speedLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text('${_currentPosition?.speed ?? 'N/A'}', style: const TextStyle(color: AppConfig.primaryTextColor)),
-                    ],
-                  ),
-                  const SizedBox(height: AppConfig.smallPadding),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(AppConfig.accuracyLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
-                      Text('${_currentPosition?.accuracy ?? 'N/A'}', style: const TextStyle(color: AppConfig.primaryTextColor)),
-                    ],
-                  ),
-                ],
+                  borderRadius:
+                      BorderRadius.circular(AppConfig.inputBorderRadius)),
+              alignment: Alignment.center,
+              child: Center(
+                child: Table(
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  columnWidths: const {
+                    0: IntrinsicColumnWidth(),
+                    1: IntrinsicColumnWidth(),
+                  },
+                  children: [
+                    // Latitude
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${AppConfig.latitudeLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ${_currentPosition != null
+                              ? LocationFormatter.formatLatitude(_currentPosition!.latitude)
+                              : 'N/A'}',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                    TableRow(children: [
+                      SizedBox(height: AppConfig.smallPadding),
+                      SizedBox(height: AppConfig.smallPadding),
+                    ]),
+                    // Longitude
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${AppConfig.longitudeLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ${_currentPosition != null
+                              ? LocationFormatter.formatLongitude(_currentPosition!.longitude)
+                              : 'N/A'}',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                    TableRow(children: [
+                      SizedBox(height: AppConfig.smallPadding),
+                      SizedBox(height: AppConfig.smallPadding),
+                    ]),
+                    // Altitude
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${AppConfig.altitudeLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ${MeasureFormatter.formatAltitude(_currentPosition?.altitude)}',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                    TableRow(children: [
+                      SizedBox(height: AppConfig.smallPadding),
+                      SizedBox(height: AppConfig.smallPadding),
+                    ]),
+                    // Azimuth
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${AppConfig.azimuthLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ${MeasureFormatter.formatAzimuth(_currentPosition?.heading)}',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                    TableRow(children: [
+                      SizedBox(height: AppConfig.smallPadding),
+                      SizedBox(height: AppConfig.smallPadding),
+                    ]),
+                    // Speed
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${AppConfig.speedLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ${MeasureFormatter.formatSpeed(_currentPosition?.speed)}',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                    TableRow(children: [
+                      SizedBox(height: AppConfig.smallPadding),
+                      SizedBox(height: AppConfig.smallPadding),
+                    ]),
+                    // Accuracy
+                    TableRow(children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${AppConfig.accuracyLabel}:',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '  ${MeasureFormatter.formatAccuracy(_currentPosition?.accuracy)}',
+                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ]),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: AppConfig.extraLargePadding),
-            
+
             // Export and clear
-            Row(              children: [
+            Row(
+              children: [
                 Expanded(
                   child: OutlinedButton(
                     onPressed: _exportData,
                     style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppConfig.outlineColor),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
+                          borderRadius: BorderRadius.circular(
+                              AppConfig.buttonBorderRadius),
                         )),
-                    child: const Text(AppConfig.exportDataLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
+                    child: const Text(AppConfig.exportDataLabel,
+                        style: TextStyle(color: AppConfig.primaryTextColor)),
                   ),
                 ),
                 const SizedBox(width: AppConfig.mediumPadding),
@@ -392,19 +557,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppConfig.outlineColor),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppConfig.buttonBorderRadius),
+                          borderRadius: BorderRadius.circular(
+                              AppConfig.buttonBorderRadius),
                         )),
-                    child: const Text(AppConfig.clearDataLabel, style: TextStyle(color: AppConfig.primaryTextColor)),
+                    child: const Text(AppConfig.clearDataLabel,
+                        style: TextStyle(color: AppConfig.primaryTextColor)),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: AppConfig.extraLargePadding),
-            
+
             // Event log
             const Text(
               AppConfig.eventLogTitle,
-              style: TextStyle(color: AppConfig.disabledColor, fontSize: AppConfig.sectionTitleFontSize, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: AppConfig.disabledColor,
+                  fontSize: AppConfig.sectionTitleFontSize,
+                  fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: AppConfig.mediumPadding),
             Expanded(
@@ -412,15 +582,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 padding: const EdgeInsets.all(AppConfig.mediumPadding),
                 decoration: BoxDecoration(
                     border: Border.all(color: AppConfig.outlineColor),
-                    borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius)),                child: ListView.builder(
+                    borderRadius:
+                        BorderRadius.circular(AppConfig.inputBorderRadius)),
+                child: ListView.builder(
                   itemCount: _events.length,
                   itemBuilder: (context, index) {
                     final event = _events[index];
+                    final eventTypeColor = _getEventTypeColor(event.eventType);
+                    final eventTypeText = event.eventType;
+                    final eventDetails = _formatEventForDisplayNoType(event);
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: AppConfig.smallPadding),
-                      child: Text(
-                        _formatEventForDisplay(event),
-                        style: const TextStyle(color: AppConfig.primaryTextColor, fontSize: 12),
+                      padding:
+                          const EdgeInsets.only(bottom: AppConfig.smallPadding),
+                      child: Row(
+                        children: [
+                          Text(
+                            eventTypeText,
+                            style: TextStyle(
+                                color: eventTypeColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              eventDetails,
+                              style: const TextStyle(
+                                  color: AppConfig.primaryTextColor, fontSize: 12),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },

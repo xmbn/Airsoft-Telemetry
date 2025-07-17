@@ -2,9 +2,11 @@ class GameEvent {
   final int? id;
   final String gameSessionId;
   final String playerId;
-  final String eventType; // "HIT", "RESPAWN", "KILL", "LOCATION", "START", "STOP", "PAUSE", "RESUME"
+  final String
+      eventType; // "HIT", "RESPAWN", "KILL", "LOCATION", "START", "STOP", "PAUSE", "RESUME"
   final int timestamp;
-  final double latitude;  final double longitude;
+  final double latitude;
+  final double longitude;
   final double altitude;
   final double? azimuth; // in degrees
   final double? speed; // in m/s

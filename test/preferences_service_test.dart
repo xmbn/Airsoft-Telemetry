@@ -49,13 +49,14 @@ void main() {
       expect(preferencesService.getIntervalInSeconds('10s'), equals(10));
       expect(preferencesService.getIntervalInSeconds('30s'), equals(30));
       expect(preferencesService.getIntervalInSeconds('60s'), equals(60));
-      expect(preferencesService.getIntervalInSeconds('invalid'), equals(2)); // default
+      expect(preferencesService.getIntervalInSeconds('invalid'),
+          equals(2)); // default
     });
 
     test('loadAllPreferences returns correct values', () async {
       await preferencesService.setPlayerName('TestPlayer');
       await preferencesService.setUpdateInterval('10s');
-      
+
       final preferences = await preferencesService.loadAllPreferences();
       expect(preferences['playerName'], equals('TestPlayer'));
       expect(preferences['interval'], equals('10s'));
@@ -64,12 +65,12 @@ void main() {
     test('clearAllPreferences works correctly', () async {
       await preferencesService.setPlayerName('TestPlayer');
       await preferencesService.setUpdateInterval('10s');
-      
+
       await preferencesService.clearAllPreferences();
-      
+
       final playerName = await preferencesService.getPlayerName();
       final interval = await preferencesService.getUpdateInterval();
-      
+
       expect(playerName, equals(AppConfig.defaultPlayerName));
       expect(interval, equals(AppConfig.defaultInterval));
     });

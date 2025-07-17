@@ -15,6 +15,7 @@ class DatabaseService {
     _database = await _initDatabase();
     return _database!;
   }
+
   Future<Database> _initDatabase() async {
     final String path = join(await getDatabasesPath(), 'airsoft_telemetry.db');
     return await openDatabase(
@@ -151,7 +152,8 @@ class DatabaseService {
 
   Future<int> getEventCount() async {
     final db = await database;
-    final List<Map<String, dynamic>> result = await db.rawQuery('SELECT COUNT(*) FROM game_events');
+    final List<Map<String, dynamic>> result =
+        await db.rawQuery('SELECT COUNT(*) FROM game_events');
     return Sqflite.firstIntValue(result) ?? 0;
   }
 

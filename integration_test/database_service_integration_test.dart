@@ -5,7 +5,7 @@ import 'package:airsoft_telemetry_flutter/services/database_service.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  
+
   group('DatabaseService Integration Tests', () {
     late DatabaseService databaseService;
 
@@ -46,7 +46,7 @@ void main() {
     test('getAllEvents retrieves all events in correct order', () async {
       final timestamp1 = DateTime.now().millisecondsSinceEpoch - 1000;
       final timestamp2 = DateTime.now().millisecondsSinceEpoch;
-      
+
       final event1 = GameEvent(
         gameSessionId: 'session_1',
         playerId: 'player_1',
@@ -72,7 +72,7 @@ void main() {
 
       final events = await databaseService.getAllEvents();
       expect(events.length, equals(2));
-      
+
       // Should be ordered by timestamp DESC (newest first)
       expect(events[0].timestamp, equals(timestamp2));
       expect(events[1].timestamp, equals(timestamp1));
@@ -82,7 +82,7 @@ void main() {
 
     test('getEventsBySession filters events correctly', () async {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      
+
       final eventSession1 = GameEvent(
         gameSessionId: 'session_1',
         playerId: 'player_1',
@@ -117,19 +117,21 @@ void main() {
       await databaseService.insertEvent(eventSession2);
       await databaseService.insertEvent(anotherEventSession1);
 
-      final session1Events = await databaseService.getEventsBySession('session_1');
+      final session1Events =
+          await databaseService.getEventsBySession('session_1');
       expect(session1Events.length, equals(2));
       expect(session1Events[0].gameSessionId, equals('session_1'));
       expect(session1Events[1].gameSessionId, equals('session_1'));
-      
-      final session2Events = await databaseService.getEventsBySession('session_2');
+
+      final session2Events =
+          await databaseService.getEventsBySession('session_2');
       expect(session2Events.length, equals(1));
       expect(session2Events[0].gameSessionId, equals('session_2'));
     });
 
     test('getRecentEvents respects limit parameter', () async {
       final baseTimestamp = DateTime.now().millisecondsSinceEpoch;
-      
+
       // Insert 10 events
       for (int i = 0; i < 10; i++) {
         final event = GameEvent(
@@ -146,12 +148,13 @@ void main() {
 
       // Test default limit
       final defaultEvents = await databaseService.getRecentEvents();
-      expect(defaultEvents.length, equals(10)); // Should get all since we only have 10
+      expect(defaultEvents.length,
+          equals(10)); // Should get all since we only have 10
 
       // Test custom limit
       final limitedEvents = await databaseService.getRecentEvents(limit: 5);
       expect(limitedEvents.length, equals(5));
-      
+
       // Should be ordered by timestamp DESC (newest first)
       expect(limitedEvents[0].eventType, equals('EVENT_9'));
       expect(limitedEvents[4].eventType, equals('EVENT_5'));
@@ -159,7 +162,7 @@ void main() {
 
     test('clearAllEvents removes all data', () async {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      
+
       // Insert multiple events
       for (int i = 0; i < 5; i++) {
         final event = GameEvent(
@@ -192,7 +195,7 @@ void main() {
 
     test('clearEventsBySession removes only specified session data', () async {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      
+
       // Insert events for different sessions
       final eventSession1a = GameEvent(
         gameSessionId: 'session_1',
@@ -229,15 +232,18 @@ void main() {
       await databaseService.insertEvent(eventSession2);
 
       // Clear only session_1 events
-      final deletedCount = await databaseService.clearEventsBySession('session_1');
+      final deletedCount =
+          await databaseService.clearEventsBySession('session_1');
       expect(deletedCount, equals(2));
 
       // Verify session_1 events are gone
-      final session1Events = await databaseService.getEventsBySession('session_1');
+      final session1Events =
+          await databaseService.getEventsBySession('session_1');
       expect(session1Events.length, equals(0));
 
       // Verify session_2 events remain
-      final session2Events = await databaseService.getEventsBySession('session_2');
+      final session2Events =
+          await databaseService.getEventsBySession('session_2');
       expect(session2Events.length, equals(1));
 
       // Verify total count
@@ -251,7 +257,7 @@ void main() {
       expect(initialCount, equals(0));
 
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      
+
       // Insert events one by one and verify count
       for (int i = 1; i <= 3; i++) {
         final event = GameEvent(
@@ -294,7 +300,7 @@ void main() {
       expect(events.length, equals(1));
 
       final retrievedEvent = events[0];
-      
+
       // Verify all fields are correctly persisted and retrieved
       expect(retrievedEvent.id, equals(id));
       expect(retrievedEvent.gameSessionId, equals(originalEvent.gameSessionId));
@@ -334,16 +340,17 @@ void main() {
       expect(events.length, equals(1));
 
       final retrievedEvent = events[0];
-      
+
       // Verify required fields
-      expect(retrievedEvent.gameSessionId, equals(eventWithNulls.gameSessionId));
+      expect(
+          retrievedEvent.gameSessionId, equals(eventWithNulls.gameSessionId));
       expect(retrievedEvent.playerId, equals(eventWithNulls.playerId));
       expect(retrievedEvent.eventType, equals(eventWithNulls.eventType));
       expect(retrievedEvent.timestamp, equals(eventWithNulls.timestamp));
       expect(retrievedEvent.latitude, equals(eventWithNulls.latitude));
       expect(retrievedEvent.longitude, equals(eventWithNulls.longitude));
       expect(retrievedEvent.altitude, equals(eventWithNulls.altitude));
-      
+
       // Verify optional fields are null
       expect(retrievedEvent.azimuth, isNull);
       expect(retrievedEvent.speed, isNull);
