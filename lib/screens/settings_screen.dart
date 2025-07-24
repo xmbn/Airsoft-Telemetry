@@ -222,7 +222,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // Returns only lat, long, alt, time (no event type)
   String _formatEventForDisplayNoType(GameEvent event) {
     final dateTime = DateTime.fromMillisecondsSinceEpoch(event.timestamp);
-    final timeString = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}';
+    final timeString =
+        '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}';
     return '${LocationFormatter.formatLatitude(event.latitude)},'
         '${LocationFormatter.formatLongitude(event.longitude)},'
         '${MeasureFormatter.formatAltitude(event.altitude)} $timeString';
@@ -396,17 +397,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         alignment: Alignment.centerRight,
                         child: Text(
                           '${AppConfig.latitudeLabel}:',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.right,
                         ),
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '  ${_currentPosition != null
-                              ? LocationFormatter.formatLatitude(_currentPosition!.latitude)
-                              : 'N/A'}',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          '  ${_currentPosition != null ? LocationFormatter.formatLatitude(_currentPosition!.latitude) : 'N/A'}',
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
                       ),
@@ -421,17 +422,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         alignment: Alignment.centerRight,
                         child: Text(
                           '${AppConfig.longitudeLabel}:',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.right,
                         ),
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '  ${_currentPosition != null
-                              ? LocationFormatter.formatLongitude(_currentPosition!.longitude)
-                              : 'N/A'}',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          '  ${_currentPosition != null ? LocationFormatter.formatLongitude(_currentPosition!.longitude) : 'N/A'}',
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
                       ),
@@ -446,7 +447,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         alignment: Alignment.centerRight,
                         child: Text(
                           '${AppConfig.altitudeLabel}:',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -454,7 +456,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '  ${MeasureFormatter.formatAltitude(_currentPosition?.altitude)}',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
                       ),
@@ -469,7 +472,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         alignment: Alignment.centerRight,
                         child: Text(
                           '${AppConfig.azimuthLabel}:',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -477,7 +481,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '  ${MeasureFormatter.formatAzimuth(_currentPosition?.heading)}',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
                       ),
@@ -492,7 +497,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         alignment: Alignment.centerRight,
                         child: Text(
                           '${AppConfig.speedLabel}:',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -500,7 +506,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '  ${MeasureFormatter.formatSpeed(_currentPosition?.speed)}',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
                       ),
@@ -515,7 +522,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         alignment: Alignment.centerRight,
                         child: Text(
                           '${AppConfig.accuracyLabel}:',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -523,7 +531,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '  ${MeasureFormatter.formatAccuracy(_currentPosition?.accuracy)}',
-                          style: const TextStyle(color: AppConfig.primaryTextColor),
+                          style: const TextStyle(
+                              color: AppConfig.primaryTextColor),
                           textAlign: TextAlign.left,
                         ),
                       ),
@@ -608,7 +617,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             child: Text(
                               eventDetails,
                               style: const TextStyle(
-                                  color: AppConfig.primaryTextColor, fontSize: 12),
+                                  color: AppConfig.primaryTextColor,
+                                  fontSize: 12),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
