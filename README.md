@@ -11,6 +11,17 @@ A comprehensive Flutter mobile application for Android and iOS devices designed 
 
 > **Note**: This project is developed through human-AI collaboration. Most of the code is written and maintained by AI, orchestrated under human guidance and oversight by experienced programmers.
 
+<div align="center">
+  <div style="display: inline-block; margin-right: 20px;">
+    <p><strong>Home Screen</strong></p>
+    <img src="docs/assets/home-screen.jpg" alt="Home Screen Screenshot" width="256" style="border: 2px solid #888; border-radius: 8px;" />
+  </div>
+  <div style="display: inline-block;">
+    <p><strong>Settings Screen</strong></p>
+    <img src="docs/assets/settings-screen.jpg" alt="Settings Screen Screenshot" width="256" style="border: 2px solid #888; border-radius: 8px;" />
+  </div>
+</div>
+
 ## How It Works & Features
 
 Transform your mobile device into a comprehensive telemetry system for Airsoft gameplay with these core capabilities:
